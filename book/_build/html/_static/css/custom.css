@@ -1,0 +1,71 @@
+/* Hide announcement banner */
+div.bd-header-announcement {
+    display: none !important;
+}
+
+/* Hide footer */
+div.footer {
+    display: none !important;
+}
+
+/* Remove shadows and simplify UI */
+.bd-sidebar-primary {
+    border-right: 1px solid #eee;
+    box-shadow: none !important;
+}
+
+.bd-sidebar-secondary {
+    border-left: 1px solid #eee;
+    box-shadow: none !important;
+}
+
+/* Clean up top navigation */
+.navbar-header-items {
+    font-size: 1rem;
+}
+
+/* Remove badges and secondary elements */
+.badge {
+    display: none !important;
+}
+
+/* Hide launch buttons for notebooks */
+button.btn-sm, 
+.btn-group-sm > .btn {
+    display: none !important;
+}
+
+/* Remove popup dialogs */
+#bd-help-panel,
+#settingsModal {
+    display: none !important;
+}
+
+/* Hide the 'On this page' section on mobile */
+@media (max-width: 768px) {
+    .toc-desktop-hidden {
+        display: none !important;
+    }
+}
+
+/* Simplify code cells */
+div.highlight {
+    border: 1px solid #eee;
+    box-shadow: none !important;
+}
+
+/* Remove cell borders and simplify notebook appearance */
+.cell_input, .cell_output {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Hide tooltips */
+.tooltipped::after {
+    display: none !important;
+}
+
+/* Hide copy buttons */
+button.copybtn {
+    display: none !important;
+} 
