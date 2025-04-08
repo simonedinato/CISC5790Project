@@ -7,5 +7,7 @@ chapters:
 - file: data_retrieval
 - file: data_preprocessing
 - file: exploratory_data_analysis
-- file: supervised
-- file: unsupervised
+- file: RandomForest
+- file: AdaBoosting
+- file: Clustering
+- file: Readme

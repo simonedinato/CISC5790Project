@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Data Retrieval &#8212; Alzheimer&#39;s Disease Data Analysis</title>
+    <title>Data Retrieval &#8212; CISC5790 - Alzheimer&#39;s Disease Data Analysis</title>
   
   
   
@@ -32,10 +32,9 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=bc5ed871" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -154,8 +153,8 @@
       
     
     
-    <img src="_static/logo.png" class="logo__image only-light" alt="Alzheimer's Disease Data Analysis - Home"/>
-    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Alzheimer's Disease Data Analysis - Home"/>`);</script>
+    <img src="_static/logo.png" class="logo__image only-light" alt="CISC5790 - Alzheimer's Disease Data Analysis - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="CISC5790 - Alzheimer's Disease Data Analysis - Home"/>`);</script>
   
   
 </a></div>
@@ -184,8 +183,6 @@
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Data Retrieval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data_preprocessing.html">Data Preprocessing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="exploratory_data_analysis.html">Exploratory Data Analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="supervised.html">Supervised</a></li>
-<li class="toctree-l1"><a class="reference internal" href="unsupervised.html">Unsupervised</a></li>
 </ul>
 
     </div>
@@ -227,6 +224,53 @@
         <div class="header-article-item">
 
 <div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/simonedinato/CISC5790Project" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/simonedinato/CISC5790Project/issues/new?title=Issue%20on%20page%20%2Fdata_retrieval.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
 
 
 
@@ -311,7 +355,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -327,6 +373,35 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">1. Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset-source">2. Dataset Source</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-retrieval-process">3. Data Retrieval Process</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#downloading-the-dataset">3.1. Downloading the Dataset</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-data-inspection">3.2. Initial Data Inspection</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#explanation-of-features-and-target-variable">4. Explanation of Features and Target Variable</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#target-variable">4.1. Target Variable</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#features">4.2. Features</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#demographic-features">Demographic Features</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#lifestyle-features">Lifestyle Features</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medical-history-features">Medical History Features</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#clinical-measurements">Clinical Measurements</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cognitive-and-functional-assessments">Cognitive and Functional Assessments</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#behavioral-and-symptom-based-features">Behavioral and Symptom-Based Features</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#metadata">Metadata</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#observations">4.3. Observations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -338,6 +413,405 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="data-retrieval">
 <h1>Data Retrieval<a class="headerlink" href="#data-retrieval" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>1. Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>This section details the steps taken to obtain the “Alzheimer’s Disease Dataset” from Kaggle, describes its features, and outlines the project’s goals. The dataset, provided by Rabie El Kharoua, contains tabular data with a binary target variable, <code class="docutils literal notranslate"><span class="pre">Diagnosis</span></code>, indicating the presence or absence of Alzheimer’s disease. The goal is to use this data for a binary classification task to predict Alzheimer’s disease using machine learning models.</p>
+</section>
+<section id="dataset-source">
+<h2>2. Dataset Source<a class="headerlink" href="#dataset-source" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Dataset Name:</strong> Alzheimer’s Disease Dataset</p></li>
+<li><p><strong>Source:</strong> Kaggle, provided by Rabie El Kharoua</p></li>
+<li><p><strong>URL:</strong> <a class="reference external" href="https://www.kaggle.com/datasets/rabieelkharoua/alzheimers-disease-dataset">https://www.kaggle.com/datasets/rabieelkharoua/alzheimers-disease-dataset</a></p></li>
+<li><p><strong>Access Date:</strong> March 17, 2025</p></li>
+<li><p><strong>License:</strong> The dataset is publicly available on Kaggle under the Kaggle Community Guidelines, which typically allow usage for research and educational purposes. No additional permissions were required for access.</p></li>
+<li><p><strong>Rationale for Selection:</strong> This dataset was chosen because it provides a well-labeled, tabular dataset for Alzheimer’s disease classification, suitable for machine learning tasks. It includes 2149 samples with a binary target variable, making it appropriate for a binary classification problem. Its public availability ensures reproducibility, and its tabular format aligns with the project’s focus on traditional machine learning models.</p></li>
+</ul>
+</section>
+<section id="data-retrieval-process">
+<h2>3. Data Retrieval Process<a class="headerlink" href="#data-retrieval-process" title="Link to this heading">#</a></h2>
+<p>The data retrieval process involved the following steps to acquire the dataset and perform an initial inspection:</p>
+<section id="downloading-the-dataset">
+<h3>3.1. Downloading the Dataset<a class="headerlink" href="#downloading-the-dataset" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Method:</strong> The dataset was downloaded directly from Kaggle using the provided URL.</p></li>
+<li><p><strong>Steps:</strong></p>
+<ol class="arabic simple">
+<li><p>Navigated to the dataset page on Kaggle (<a class="reference external" href="https://www.kaggle.com/datasets/rabieelkharoua/alzheimers-disease-dataset">https://www.kaggle.com/datasets/rabieelkharoua/alzheimers-disease-dataset</a>).</p></li>
+<li><p>Signed into a Kaggle account to access the download option (Kaggle requires authentication for dataset downloads).</p></li>
+<li><p>Clicked the “Download” button to retrieve the dataset as a ZIP file.</p></li>
+<li><p>Extracted the ZIP file to obtain the CSV file, named <code class="docutils literal notranslate"><span class="pre">alzheimers_disease_data.csv</span></code>.</p></li>
+</ol>
+</li>
+<li><p><strong>Storage:</strong> The extracted CSV file was stored locally in the project directory under <code class="docutils literal notranslate"><span class="pre">/data/alzheimers_disease_data.csv</span></code> for version control and reproducibility.</p></li>
+</ul>
+</section>
+<section id="initial-data-inspection">
+<h3>3.2. Initial Data Inspection<a class="headerlink" href="#initial-data-inspection" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Tool Used:</strong> Python with the pandas library was used to load and inspect the dataset.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/alzheimers_disease_data.csv&#39;</span><span class="p">)</span>
+
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>PatientID</th>
+      <th>Age</th>
+      <th>Gender</th>
+      <th>Ethnicity</th>
+      <th>EducationLevel</th>
+      <th>BMI</th>
+      <th>Smoking</th>
+      <th>AlcoholConsumption</th>
+      <th>PhysicalActivity</th>
+      <th>DietQuality</th>
+      <th>...</th>
+      <th>MemoryComplaints</th>
+      <th>BehavioralProblems</th>
+      <th>ADL</th>
+      <th>Confusion</th>
+      <th>Disorientation</th>
+      <th>PersonalityChanges</th>
+      <th>DifficultyCompletingTasks</th>
+      <th>Forgetfulness</th>
+      <th>Diagnosis</th>
+      <th>DoctorInCharge</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>4751</td>
+      <td>73</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+      <td>22.927749</td>
+      <td>0</td>
+      <td>13.297218</td>
+      <td>6.327112</td>
+      <td>1.347214</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1.725883</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>XXXConfid</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4752</td>
+      <td>89</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>26.827681</td>
+      <td>0</td>
+      <td>4.542524</td>
+      <td>7.619885</td>
+      <td>0.518767</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2.592424</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>XXXConfid</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>4753</td>
+      <td>73</td>
+      <td>0</td>
+      <td>3</td>
+      <td>1</td>
+      <td>17.795882</td>
+      <td>0</td>
+      <td>19.555085</td>
+      <td>7.844988</td>
+      <td>1.826335</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>7.119548</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>XXXConfid</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4754</td>
+      <td>74</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>33.800817</td>
+      <td>1</td>
+      <td>12.209266</td>
+      <td>8.428001</td>
+      <td>7.435604</td>
+      <td>...</td>
+      <td>0</td>
+      <td>1</td>
+      <td>6.481226</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>XXXConfid</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4755</td>
+      <td>89</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>20.716974</td>
+      <td>0</td>
+      <td>18.454356</td>
+      <td>6.310461</td>
+      <td>0.795498</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.014691</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>XXXConfid</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 35 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">info</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(2149, 35)
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 2149 entries, 0 to 2148
+Data columns (total 35 columns):
+ #   Column                     Non-Null Count  Dtype  
+---  ------                     --------------  -----  
+ 0   PatientID                  2149 non-null   int64  
+ 1   Age                        2149 non-null   int64  
+ 2   Gender                     2149 non-null   int64  
+ 3   Ethnicity                  2149 non-null   int64  
+ 4   EducationLevel             2149 non-null   int64  
+ 5   BMI                        2149 non-null   float64
+ 6   Smoking                    2149 non-null   int64  
+ 7   AlcoholConsumption         2149 non-null   float64
+ 8   PhysicalActivity           2149 non-null   float64
+ 9   DietQuality                2149 non-null   float64
+ 10  SleepQuality               2149 non-null   float64
+ 11  FamilyHistoryAlzheimers    2149 non-null   int64  
+ 12  CardiovascularDisease      2149 non-null   int64  
+ 13  Diabetes                   2149 non-null   int64  
+ 14  Depression                 2149 non-null   int64  
+ 15  HeadInjury                 2149 non-null   int64  
+ 16  Hypertension               2149 non-null   int64  
+ 17  SystolicBP                 2149 non-null   int64  
+ 18  DiastolicBP                2149 non-null   int64  
+ 19  CholesterolTotal           2149 non-null   float64
+ 20  CholesterolLDL             2149 non-null   float64
+ 21  CholesterolHDL             2149 non-null   float64
+ 22  CholesterolTriglycerides   2149 non-null   float64
+ 23  MMSE                       2149 non-null   float64
+ 24  FunctionalAssessment       2149 non-null   float64
+ 25  MemoryComplaints           2149 non-null   int64  
+ 26  BehavioralProblems         2149 non-null   int64  
+ 27  ADL                        2149 non-null   float64
+ 28  Confusion                  2149 non-null   int64  
+ 29  Disorientation             2149 non-null   int64  
+ 30  PersonalityChanges         2149 non-null   int64  
+ 31  DifficultyCompletingTasks  2149 non-null   int64  
+ 32  Forgetfulness              2149 non-null   int64  
+ 33  Diagnosis                  2149 non-null   int64  
+ 34  DoctorInCharge             2149 non-null   object 
+dtypes: float64(12), int64(22), object(1)
+memory usage: 587.7+ KB
+None
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Diagnosis&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span> 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Diagnosis
+0    1389
+1     760
+Name: count, dtype: int64
+</pre></div>
+</div>
+</div>
+</div>
+<ul class="simple">
+<li><p><strong>Findings:</strong></p>
+<ul>
+<li><p>Confirmed the dataset has 2149 rows and 35 columns (based on the actual dataset structure).</p></li>
+<li><p>Identified the data types of each column (numerical, categorical, or binary).</p></li>
+<li><p>Verified the distribution of the target variable to understand the class balance between the two categories (Alzheimer’s vs. No Alzheimer’s).</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="explanation-of-features-and-target-variable">
+<h2>4. Explanation of Features and Target Variable<a class="headerlink" href="#explanation-of-features-and-target-variable" title="Link to this heading">#</a></h2>
+<p>The dataset contains 35 columns, including 34 features and 1 target variable. Below is a detailed description of each feature, the target variable, and their relevance to Alzheimer’s disease prediction, based on the dataset’s structure as described on Kaggle.</p>
+<section id="target-variable">
+<h3>4.1. Target Variable<a class="headerlink" href="#target-variable" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Diagnosis (Target):</strong> This is the target variable, indicating the presence or absence of Alzheimer’s disease. It is a binary variable with two possible values:</p>
+<ul>
+<li><p>0: No Alzheimer’s (healthy or non-demented)</p></li>
+<li><p>1: Alzheimer’s (demented)</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="features">
+<h3>4.2. Features<a class="headerlink" href="#features" title="Link to this heading">#</a></h3>
+<p>The dataset includes 34 features, which can be categorized into demographic, lifestyle, medical history, clinical, cognitive, functional, behavioral, and physical measurements. Below is a detailed breakdown,for the 34 features:</p>
+<section id="demographic-features">
+<h4>Demographic Features<a class="headerlink" href="#demographic-features" title="Link to this heading">#</a></h4>
+<ol class="arabic simple">
+<li><p><strong>PatientID:</strong> A unique identifier for each patient (numerical, integer).</p></li>
+<li><p><strong>Age:</strong> The patient’s age in years (numerical, integer, range: 60–90).</p></li>
+<li><p><strong>Gender:</strong> The patient’s gender (binary, 0 = Male, 1 = Female).</p></li>
+<li><p><strong>Ethnicity:</strong> The patient’s ethnicity (categorical, 0 = Caucasian, 1 = African American, 2 = Asian, 3 = Other).</p></li>
+<li><p><strong>EducationLevel:</strong> The patient’s education level in years (categorical, 0 = None, 1 = High School, 2 = Bachelor’s, 3 = Higher).</p></li>
+</ol>
+</section>
+<section id="lifestyle-features">
+<h4>Lifestyle Features<a class="headerlink" href="#lifestyle-features" title="Link to this heading">#</a></h4>
+<ol class="arabic simple" start="6">
+<li><p><strong>BMI:</strong> Body Mass Index (numerical, float, range: 15–40).</p></li>
+<li><p><strong>Smoking:</strong> Smoking status (binary, 0 = No, 1 = Yes).</p></li>
+<li><p><strong>AlcoholConsumption:</strong> Weekly alcohol consumption in units (numerical, float, range: 0–20).</p></li>
+<li><p><strong>PhysicalActivity:</strong> Weekly physical activity in hours (numerical, float, range: 0–10).</p></li>
+<li><p><strong>DietQuality:</strong> Quality of diet (numerical, float, range: 0–10, higher indicates better quality).</p></li>
+<li><p><strong>SleepQuality:</strong> Quality of sleep (numerical, float, range: 4–10, higher indicates better quality).</p></li>
+</ol>
+</section>
+<section id="medical-history-features">
+<h4>Medical History Features<a class="headerlink" href="#medical-history-features" title="Link to this heading">#</a></h4>
+<ol class="arabic simple" start="12">
+<li><p><strong>FamilyHistoryAlzheimers:</strong> Family history of Alzheimer’s (binary, 0 = No, 1 = Yes).</p></li>
+<li><p><strong>CardiovascularDisease:</strong> Presence of cardiovascular disease (binary, 0 = No, 1 = Yes).</p></li>
+<li><p><strong>Diabetes:</strong> Presence of diabetes (binary, 0 = No, 1 = Yes).</p></li>
+<li><p><strong>Depression:</strong> Presence of depression (binary, 0 = No, 1 = Yes).</p></li>
+<li><p><strong>HeadInjury:</strong> History of head injury (binary, 0 = No, 1 = Yes).</p></li>
+<li><p><strong>Hypertension:</strong> Presence of hypertension (binary, 0 = No, 1 = Yes).</p></li>
+</ol>
+</section>
+<section id="clinical-measurements">
+<h4>Clinical Measurements<a class="headerlink" href="#clinical-measurements" title="Link to this heading">#</a></h4>
+<ol class="arabic simple" start="18">
+<li><p><strong>SystolicBP:</strong> Systolic blood pressure (numerical, integer, range: 90–180).</p></li>
+<li><p><strong>DiastolicBP:</strong> Diastolic blood pressure (numerical, integer, range: 60–120).</p></li>
+<li><p><strong>CholesterolTotal:</strong> Total cholesterol level (numerical, float, range: 150–300).</p></li>
+<li><p><strong>CholesterolLDL:</strong> Low-density lipoprotein cholesterol level (numerical, float, range: 50–200).</p></li>
+<li><p><strong>CholesterolHDL:</strong> High-density lipoprotein cholesterol level (numerical, float, range: 20–100).</p></li>
+<li><p><strong>CholesterolTriglycerides:</strong> Triglyceride level (numerical, float, range: 50–400).</p></li>
+</ol>
+</section>
+<section id="cognitive-and-functional-assessments">
+<h4>Cognitive and Functional Assessments<a class="headerlink" href="#cognitive-and-functional-assessments" title="Link to this heading">#</a></h4>
+<ol class="arabic simple" start="24">
+<li><p><strong>MMSE:</strong> Mini-Mental State Examination score (numerical, float, range: 0–30, higher indicates better cognitive function).</p></li>
+<li><p><strong>FunctionalAssessment:</strong> Functional assessment score (numerical, float, range: 0–10, higher indicates better functioning).</p></li>
+<li><p><strong>MemoryComplaints:</strong> Presence of memory complaints (binary, 0 = No, 1 = Yes).</p></li>
+<li><p><strong>BehavioralProblems:</strong> Presence of behavioral problems (binary, 0 = No, 1 = Yes).</p></li>
+<li><p><strong>ADL:</strong> Activities of Daily Living score (numerical, float, range: 0–10, higher indicates better independence).</p></li>
+</ol>
+</section>
+<section id="behavioral-and-symptom-based-features">
+<h4>Behavioral and Symptom-Based Features<a class="headerlink" href="#behavioral-and-symptom-based-features" title="Link to this heading">#</a></h4>
+<ol class="arabic simple" start="29">
+<li><p><strong>Confusion:</strong> Presence of confusion (binary, 0 = No, 1 = Yes).</p></li>
+<li><p><strong>Disorientation:</strong> Presence of disorientation (binary, 0 = No, 1 = Yes).</p></li>
+<li><p><strong>PersonalityChanges:</strong> Presence of personality changes (binary, 0 = No, 1 = Yes).</p></li>
+<li><p><strong>DifficultyCompletingTasks:</strong> Difficulty completing familiar tasks (binary, 0 = No, 1 = Yes).</p></li>
+<li><p><strong>Forgetfulness:</strong> Presence of forgetfulness (binary, 0 = No, 1 = Yes).</p></li>
+</ol>
+</section>
+<section id="metadata">
+<h4>Metadata<a class="headerlink" href="#metadata" title="Link to this heading">#</a></h4>
+<ol class="arabic simple" start="34">
+<li><p><strong>DoctorInCharge:</strong> A column indicating the doctor in charge (string, e.g., “XXX”).</p></li>
+</ol>
+</section>
+<section id="observations">
+<h4>4.3. Observations<a class="headerlink" href="#observations" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Class Distribution:</strong> The target variable (Diagnosis) showed the following distribution (example based on inspection):</p>
+<ul>
+<li><p>No Alzheimer’s (0): 1,389 samples</p></li>
+<li><p>Alzheimer’s (1): 760 samples
+This indicates a potential class imbalance, with fewer Alzheimer’s cases (approximately 37% of the dataset), which will be addressed in the preprocessing phase.</p></li>
+</ul>
+</li>
+<li><p><strong>Feature Types:</strong> The dataset includes a mix of numerical (e.g., Age, MMSE), binary (e.g., Gender, Smoking), and categorical (e.g., Ethnicity, EducationLevel) features, requiring appropriate preprocessing (e.g., encoding, scaling) in the next phase.</p></li>
+<li><p><strong>Metadata Column:</strong> The <code class="docutils literal notranslate"><span class="pre">DoctorInCharge</span></code> column appears to be a placeholder and will be removed during preprocessing, as it does not contribute to the prediction task.</p></li>
+</ul>
+</section>
+</section>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -395,6 +869,42 @@ document.write(`
             
             
               
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">1. Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset-source">2. Dataset Source</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-retrieval-process">3. Data Retrieval Process</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#downloading-the-dataset">3.1. Downloading the Dataset</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-data-inspection">3.2. Initial Data Inspection</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#explanation-of-features-and-target-variable">4. Explanation of Features and Target Variable</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#target-variable">4.1. Target Variable</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#features">4.2. Features</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#demographic-features">Demographic Features</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#lifestyle-features">Lifestyle Features</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medical-history-features">Medical History Features</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#clinical-measurements">Clinical Measurements</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cognitive-and-functional-assessments">Cognitive and Functional Assessments</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#behavioral-and-symptom-based-features">Behavioral and Symptom-Based Features</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#metadata">Metadata</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#observations">4.3. Observations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
             
           </div>
           <footer class="bd-footer-content">
@@ -404,7 +914,7 @@ document.write(`
   <div class="footer-item">
     
 <p class="component-author">
-By Simone Dinato
+By Team1
 </p>
 
   </div>
