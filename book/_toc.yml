@@ -10,4 +10,5 @@ chapters:
 - file: RandomForest
 - file: AdaBoosting
 - file: Clustering
+- file: Bagging Decision Tree Model
 - file: Readme
