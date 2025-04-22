@@ -13,18 +13,26 @@ from sklearn.metrics import confusion_matrix, accuracy_score, ConfusionMatrixDis
 dataset_raw = 'alzheimers_disease_data.csv'
 dataset_oversampled = 'alzheimers_disease_data_oversampled.xlsx'
 
+# Other Import Data
+dataset_cleaned = 'alzheimers_disease_cleaned.csv'
+dataset_updated = 'updated_data.csv'
+
 
 # DF build
 dataset_raw_df = pd.read_csv(dataset_raw)
 dataset_oversampled_df = pd.read_excel(dataset_oversampled)
+dataset_cleaned_df = pd.read_csv(dataset_cleaned)
+dataset_updated_df = pd.read_csv(dataset_updated)
 # show(dataset_test_df)
 
 
 if __name__ == '__main__':
 
     # Preproccessing
-    df_clean = dataset_raw_df.drop(columns=['PatientID', 'DoctorInCharge'])  # Drop IDs if present
     df_clean = dataset_oversampled_df.drop(columns=['PatientID', 'DoctorInCharge'])  # Drop IDs if present
+    df_clean = dataset_cleaned_df #.drop(columns=['PatientID', 'DoctorInCharge'])  # Drop IDs if present
+    df_clean = dataset_raw_df.drop(columns=['PatientID', 'DoctorInCharge'])  # Drop IDs if present
+    # df_clean = dataset_updated_df.drop(columns=['PatientID'])  # Drop IDs if present
     scaler = StandardScaler()
     # print(df_clean.columns)
     # show(df_clean) ===== 2,149x33
@@ -46,7 +54,8 @@ if __name__ == '__main__':
     x_scaled = scaler.fit_transform(x)
 
     ks = [1, 3, 5, 10, 25, 100, 200] # run K max sqrt(n)
-    cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+    cv = StratifiedKFold(n_splits=5, shuffle=True)
+
     highest_accuracy = 0
     best_k = 0
     for k in range(1,200):
@@ -62,13 +71,13 @@ if __name__ == '__main__':
             best_k = k
 
         # Compute confusion matrix
-        if(k == 25):
-            cm = confusion_matrix(y, y_pred)
-            ConfusionMatrixDisplay(confusion_matrix=cm).plot(cmap='Blues')
-            plt.title(f'Confusion Matrix (k={k})')
-            plt.show()
+        # if(k == 103):
+        #     cm = confusion_matrix(y, y_pred)
+        #     ConfusionMatrixDisplay(confusion_matrix=cm).plot(cmap='Blues')
+        #     plt.title(f'Confusion Matrix (k={k})')
+        #     plt.show()
 
-    print(f"Best k = {best_k} -  Accuracy = {highest_accuracy}")
+    print(f"25 Fold Performance: Best k = {best_k} - Accuracy = {highest_accuracy}")
 
 
 
