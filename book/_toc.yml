@@ -5,10 +5,8 @@ format: jb-book
 root: introduction
 chapters:
 - file: data_retrieval
-- file: data_preprocessing
-- file: exploratory_data_analysis
-- file: RandomForest
-- file: AdaBoosting
-- file: Clustering
+- file: Alzheimers_SHAP
+- file: Data_Preprocessing
+- file: alzheimers_rf
 - file: Bagging Decision Tree Model
-- file: Readme
+- file: stacking

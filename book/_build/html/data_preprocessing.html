@@ -57,11 +57,11 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'data_preprocessing';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Data_Preprocessing';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Exploratory Data Analysis" href="exploratory_data_analysis.html" />
-    <link rel="prev" title="Data Retrieval" href="data_retrieval.html" />
+    <link rel="next" title="Random Forest Classifier" href="alzheimers_rf.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="Alzheimers_SHAP.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -182,7 +182,11 @@
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="data_retrieval.html">Data Retrieval</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Data Preprocessing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="exploratory_data_analysis.html">Exploratory Data Analysis</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="alzheimers_rf.html">Random Forest Classifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Bagging%20Decision%20Tree%20Model.html">Bagging Decision Tree Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stacking.html">Stacking Models</a></li>
 </ul>
 
     </div>
@@ -254,7 +258,7 @@
       
       
       
-      <li><a href="https://github.com/simonedinato/CISC5790Project/issues/new?title=Issue%20on%20page%20%2Fdata_preprocessing.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/simonedinato/CISC5790Project/issues/new?title=Issue%20on%20page%20%2FData_Preprocessing.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -284,7 +288,7 @@
       
       
       
-      <li><a href="_sources/data_preprocessing.ipynb" target="_blank"
+      <li><a href="_sources/Data_Preprocessing.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -355,7 +359,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -371,6 +377,20 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Data Preprocessing</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#import-libraries">Import Libraries</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#load-csv-data-to-dataframe">Load csv data to Dataframe</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#checking-missing-values">CHECKING MISSING VALUES</a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -380,8 +400,1551 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="data-preprocessing">
+  <section id="data-preprocessing">
 <h1>Data Preprocessing<a class="headerlink" href="#data-preprocessing" title="Link to this heading">#</a></h1>
+</section>
+<section id="import-libraries">
+<h1>Import Libraries<a class="headerlink" href="#import-libraries" title="Link to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">plotly.express</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">px</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">LabelEncoder</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">MinMaxScaler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomizedSearchCV</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="load-csv-data-to-dataframe">
+<h1>Load csv data to Dataframe<a class="headerlink" href="#load-csv-data-to-dataframe" title="Link to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data/alzheimers_disease_data.csv&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>PatientID</th>
+      <th>Age</th>
+      <th>Gender</th>
+      <th>Ethnicity</th>
+      <th>EducationLevel</th>
+      <th>BMI</th>
+      <th>Smoking</th>
+      <th>AlcoholConsumption</th>
+      <th>PhysicalActivity</th>
+      <th>DietQuality</th>
+      <th>...</th>
+      <th>MemoryComplaints</th>
+      <th>BehavioralProblems</th>
+      <th>ADL</th>
+      <th>Confusion</th>
+      <th>Disorientation</th>
+      <th>PersonalityChanges</th>
+      <th>DifficultyCompletingTasks</th>
+      <th>Forgetfulness</th>
+      <th>Diagnosis</th>
+      <th>DoctorInCharge</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>4751</td>
+      <td>73</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+      <td>22.927749</td>
+      <td>0</td>
+      <td>13.297218</td>
+      <td>6.327112</td>
+      <td>1.347214</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1.725883</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>XXXConfid</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4752</td>
+      <td>89</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>26.827681</td>
+      <td>0</td>
+      <td>4.542524</td>
+      <td>7.619885</td>
+      <td>0.518767</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2.592424</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>XXXConfid</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>4753</td>
+      <td>73</td>
+      <td>0</td>
+      <td>3</td>
+      <td>1</td>
+      <td>17.795882</td>
+      <td>0</td>
+      <td>19.555085</td>
+      <td>7.844988</td>
+      <td>1.826335</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>7.119548</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>XXXConfid</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4754</td>
+      <td>74</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>33.800817</td>
+      <td>1</td>
+      <td>12.209266</td>
+      <td>8.428001</td>
+      <td>7.435604</td>
+      <td>...</td>
+      <td>0</td>
+      <td>1</td>
+      <td>6.481226</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>XXXConfid</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4755</td>
+      <td>89</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>20.716974</td>
+      <td>0</td>
+      <td>18.454356</td>
+      <td>6.310461</td>
+      <td>0.795498</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.014691</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>XXXConfid</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 35 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_rows</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_rows</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2149
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;DoctorInCharge&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;data/updated_data.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data/updated_data.csv&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="checking-missing-values">
+<h2>CHECKING MISSING VALUES<a class="headerlink" href="#checking-missing-values" title="Link to this heading">#</a></h2>
+<p>This data set has no missing values.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PatientID                    0
+Age                          0
+Gender                       0
+Ethnicity                    0
+EducationLevel               0
+BMI                          0
+Smoking                      0
+AlcoholConsumption           0
+PhysicalActivity             0
+DietQuality                  0
+SleepQuality                 0
+FamilyHistoryAlzheimers      0
+CardiovascularDisease        0
+Diabetes                     0
+Depression                   0
+HeadInjury                   0
+Hypertension                 0
+SystolicBP                   0
+DiastolicBP                  0
+CholesterolTotal             0
+CholesterolLDL               0
+CholesterolHDL               0
+CholesterolTriglycerides     0
+MMSE                         0
+FunctionalAssessment         0
+MemoryComplaints             0
+BehavioralProblems           0
+ADL                          0
+Confusion                    0
+Disorientation               0
+PersonalityChanges           0
+DifficultyCompletingTasks    0
+Forgetfulness                0
+Diagnosis                    0
+dtype: int64
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a mask for the upper triangle</span>
+<span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">corr</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">))</span>
+
+<span class="c1"># Plot heatmap of the correlation matrix</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">corr</span><span class="p">(),</span><span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;coolwarm&quot;</span><span class="p">,</span> <span class="n">cbar_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;shrink&quot;</span><span class="p">:</span> <span class="mf">.5</span><span class="p">},</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/721cfa82475e9a163fdcc44ab2684ed94ebba5e2207a3a9c3b11c08ca92a5999.png" src="_images/721cfa82475e9a163fdcc44ab2684ed94ebba5e2207a3a9c3b11c08ca92a5999.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">corr</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
+<span class="n">diagnosis_corr</span> <span class="o">=</span> <span class="n">corr</span><span class="p">[</span><span class="s2">&quot;Diagnosis&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">diagnosis_corr</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Diagnosis                    1.000000
+MemoryComplaints             0.306742
+BehavioralProblems           0.224350
+CholesterolHDL               0.042584
+PatientID                    0.041019
+Hypertension                 0.035080
+CardiovascularDisease        0.031490
+BMI                          0.026343
+CholesterolTriglycerides     0.022672
+DifficultyCompletingTasks    0.009069
+DietQuality                  0.008506
+CholesterolTotal             0.006394
+PhysicalActivity             0.005945
+DiastolicBP                  0.005293
+Forgetfulness               -0.000354
+Smoking                     -0.004865
+Age                         -0.005488
+Depression                  -0.005893
+AlcoholConsumption          -0.007618
+Ethnicity                   -0.014782
+SystolicBP                  -0.015615
+Confusion                   -0.019186
+PersonalityChanges          -0.020627
+Gender                      -0.020975
+HeadInjury                  -0.021411
+Disorientation              -0.024648
+Diabetes                    -0.031508
+CholesterolLDL              -0.031976
+FamilyHistoryAlzheimers     -0.032900
+EducationLevel              -0.043966
+SleepQuality                -0.056548
+MMSE                        -0.237126
+ADL                         -0.332346
+FunctionalAssessment        -0.364898
+Name: Diagnosis, dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">corr_target</span> <span class="o">=</span> <span class="n">diagnosis_corr</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;Diagnosis&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;indianred&#39;</span> <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;steelblue&#39;</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">corr_target</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">corr_target</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;barh&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Correlation of Features with Alzheimer&#39;s Diagnosis&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Correlation Coefficient&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Features&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/4104987eed38659c79eb0cf2e2655cff6d7fe13c57adb7e9aaa26fdd3a7b1e93.png" src="_images/4104987eed38659c79eb0cf2e2655cff6d7fe13c57adb7e9aaa26fdd3a7b1e93.png" />
+</div>
+</div>
+<p><strong>Observations from Exploring Correlations</strong>
+As observed, Three numerical features—Functional Assessment, ADL (Activities of Daily Living), and MMSE (Mini-Mental State Examination)—demonstrate negative correlations with the diagnosis, with correlation coefficients of -0.36, -0.33, and -0.23, respectively.
+This suggests that lower scores in these assessments are associated with a higher likelihood of having Alzheimer’s disease.</p>
+<p>Two categorical variables—Behavioral Problems and Memory Complaints—show positive correlations of 0.22 and 0.30, respectively.
+This indicates that the presence of these issues is more commonly observed in individuals who are diagnosed with Alzheimer’s.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">corr</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
+<span class="n">diagnosis_corr</span> <span class="o">=</span> <span class="n">corr</span><span class="p">[</span><span class="s2">&quot;Diagnosis&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">corr</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>PatientID</th>
+      <th>Age</th>
+      <th>Gender</th>
+      <th>Ethnicity</th>
+      <th>EducationLevel</th>
+      <th>BMI</th>
+      <th>Smoking</th>
+      <th>AlcoholConsumption</th>
+      <th>PhysicalActivity</th>
+      <th>DietQuality</th>
+      <th>...</th>
+      <th>FunctionalAssessment</th>
+      <th>MemoryComplaints</th>
+      <th>BehavioralProblems</th>
+      <th>ADL</th>
+      <th>Confusion</th>
+      <th>Disorientation</th>
+      <th>PersonalityChanges</th>
+      <th>DifficultyCompletingTasks</th>
+      <th>Forgetfulness</th>
+      <th>Diagnosis</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>PatientID</th>
+      <td>1.000000</td>
+      <td>0.002947</td>
+      <td>-0.043665</td>
+      <td>-0.007608</td>
+      <td>-0.001729</td>
+      <td>-0.034228</td>
+      <td>0.021907</td>
+      <td>-0.020733</td>
+      <td>-0.011424</td>
+      <td>-0.018490</td>
+      <td>...</td>
+      <td>0.025033</td>
+      <td>0.005748</td>
+      <td>-0.033700</td>
+      <td>-0.019787</td>
+      <td>0.004430</td>
+      <td>0.010772</td>
+      <td>-0.011987</td>
+      <td>0.029727</td>
+      <td>0.001448</td>
+      <td>0.041019</td>
+    </tr>
+    <tr>
+      <th>Age</th>
+      <td>0.002947</td>
+      <td>1.000000</td>
+      <td>0.028708</td>
+      <td>0.027745</td>
+      <td>-0.060560</td>
+      <td>-0.015677</td>
+      <td>0.020060</td>
+      <td>0.007323</td>
+      <td>-0.010249</td>
+      <td>-0.023386</td>
+      <td>...</td>
+      <td>0.005508</td>
+      <td>0.012343</td>
+      <td>0.038973</td>
+      <td>-0.038658</td>
+      <td>0.009002</td>
+      <td>0.027523</td>
+      <td>-0.009470</td>
+      <td>0.013900</td>
+      <td>-0.019279</td>
+      <td>-0.005488</td>
+    </tr>
+    <tr>
+      <th>Gender</th>
+      <td>-0.043665</td>
+      <td>0.028708</td>
+      <td>1.000000</td>
+      <td>-0.003660</td>
+      <td>-0.007070</td>
+      <td>0.005928</td>
+      <td>0.016650</td>
+      <td>0.004330</td>
+      <td>-0.035795</td>
+      <td>0.010942</td>
+      <td>...</td>
+      <td>0.033324</td>
+      <td>0.003880</td>
+      <td>0.006099</td>
+      <td>0.003865</td>
+      <td>-0.030583</td>
+      <td>0.017506</td>
+      <td>0.025919</td>
+      <td>-0.001636</td>
+      <td>-0.028537</td>
+      <td>-0.020975</td>
+    </tr>
+    <tr>
+      <th>Ethnicity</th>
+      <td>-0.007608</td>
+      <td>0.027745</td>
+      <td>-0.003660</td>
+      <td>1.000000</td>
+      <td>0.026516</td>
+      <td>-0.003176</td>
+      <td>0.031485</td>
+      <td>0.008363</td>
+      <td>0.020498</td>
+      <td>-0.018184</td>
+      <td>...</td>
+      <td>-0.004704</td>
+      <td>0.003687</td>
+      <td>-0.019363</td>
+      <td>0.010475</td>
+      <td>0.022431</td>
+      <td>-0.018132</td>
+      <td>-0.030035</td>
+      <td>0.019363</td>
+      <td>-0.034619</td>
+      <td>-0.014782</td>
+    </tr>
+    <tr>
+      <th>EducationLevel</th>
+      <td>-0.001729</td>
+      <td>-0.060560</td>
+      <td>-0.007070</td>
+      <td>0.026516</td>
+      <td>1.000000</td>
+      <td>-0.023514</td>
+      <td>-0.009904</td>
+      <td>-0.012646</td>
+      <td>-0.016703</td>
+      <td>0.017412</td>
+      <td>...</td>
+      <td>0.020269</td>
+      <td>-0.000165</td>
+      <td>0.010473</td>
+      <td>0.031934</td>
+      <td>-0.008168</td>
+      <td>-0.017568</td>
+      <td>-0.019950</td>
+      <td>0.013033</td>
+      <td>-0.008685</td>
+      <td>-0.043966</td>
+    </tr>
+    <tr>
+      <th>BMI</th>
+      <td>-0.034228</td>
+      <td>-0.015677</td>
+      <td>0.005928</td>
+      <td>-0.003176</td>
+      <td>-0.023514</td>
+      <td>1.000000</td>
+      <td>0.020437</td>
+      <td>-0.008997</td>
+      <td>0.000742</td>
+      <td>0.019922</td>
+      <td>...</td>
+      <td>-0.030501</td>
+      <td>0.029293</td>
+      <td>0.035276</td>
+      <td>-0.009788</td>
+      <td>-0.015859</td>
+      <td>-0.031840</td>
+      <td>-0.015901</td>
+      <td>-0.039400</td>
+      <td>0.071131</td>
+      <td>0.026343</td>
+    </tr>
+    <tr>
+      <th>Smoking</th>
+      <td>0.021907</td>
+      <td>0.020060</td>
+      <td>0.016650</td>
+      <td>0.031485</td>
+      <td>-0.009904</td>
+      <td>0.020437</td>
+      <td>1.000000</td>
+      <td>0.008363</td>
+      <td>0.010760</td>
+      <td>-0.002048</td>
+      <td>...</td>
+      <td>-0.031879</td>
+      <td>0.020339</td>
+      <td>-0.014763</td>
+      <td>-0.029233</td>
+      <td>0.004498</td>
+      <td>-0.028403</td>
+      <td>-0.009977</td>
+      <td>0.001741</td>
+      <td>0.018011</td>
+      <td>-0.004865</td>
+    </tr>
+    <tr>
+      <th>AlcoholConsumption</th>
+      <td>-0.020733</td>
+      <td>0.007323</td>
+      <td>0.004330</td>
+      <td>0.008363</td>
+      <td>-0.012646</td>
+      <td>-0.008997</td>
+      <td>0.008363</td>
+      <td>1.000000</td>
+      <td>0.021696</td>
+      <td>0.020117</td>
+      <td>...</td>
+      <td>-0.016483</td>
+      <td>-0.029418</td>
+      <td>0.013657</td>
+      <td>-0.008250</td>
+      <td>-0.032798</td>
+      <td>0.015521</td>
+      <td>0.019117</td>
+      <td>-0.002712</td>
+      <td>-0.024121</td>
+      <td>-0.007618</td>
+    </tr>
+    <tr>
+      <th>PhysicalActivity</th>
+      <td>-0.011424</td>
+      <td>-0.010249</td>
+      <td>-0.035795</td>
+      <td>0.020498</td>
+      <td>-0.016703</td>
+      <td>0.000742</td>
+      <td>0.010760</td>
+      <td>0.021696</td>
+      <td>1.000000</td>
+      <td>0.011085</td>
+      <td>...</td>
+      <td>-0.002419</td>
+      <td>0.008709</td>
+      <td>-0.014253</td>
+      <td>-0.013324</td>
+      <td>-0.009397</td>
+      <td>-0.020407</td>
+      <td>-0.013629</td>
+      <td>0.031169</td>
+      <td>0.009837</td>
+      <td>0.005945</td>
+    </tr>
+    <tr>
+      <th>DietQuality</th>
+      <td>-0.018490</td>
+      <td>-0.023386</td>
+      <td>0.010942</td>
+      <td>-0.018184</td>
+      <td>0.017412</td>
+      <td>0.019922</td>
+      <td>-0.002048</td>
+      <td>0.020117</td>
+      <td>0.011085</td>
+      <td>1.000000</td>
+      <td>...</td>
+      <td>-0.009700</td>
+      <td>0.012537</td>
+      <td>-0.014033</td>
+      <td>-0.007888</td>
+      <td>0.002628</td>
+      <td>-0.026271</td>
+      <td>0.029087</td>
+      <td>0.045737</td>
+      <td>0.006175</td>
+      <td>0.008506</td>
+    </tr>
+    <tr>
+      <th>SleepQuality</th>
+      <td>-0.026069</td>
+      <td>0.049139</td>
+      <td>0.007310</td>
+      <td>0.029304</td>
+      <td>0.020248</td>
+      <td>-0.005975</td>
+      <td>-0.001145</td>
+      <td>-0.003873</td>
+      <td>-0.001823</td>
+      <td>0.051295</td>
+      <td>...</td>
+      <td>0.029589</td>
+      <td>-0.016807</td>
+      <td>-0.019899</td>
+      <td>0.014535</td>
+      <td>0.013508</td>
+      <td>0.019467</td>
+      <td>-0.016892</td>
+      <td>0.011237</td>
+      <td>0.002930</td>
+      <td>-0.056548</td>
+    </tr>
+    <tr>
+      <th>FamilyHistoryAlzheimers</th>
+      <td>0.002187</td>
+      <td>-0.018784</td>
+      <td>0.018421</td>
+      <td>0.022526</td>
+      <td>0.032748</td>
+      <td>0.006446</td>
+      <td>-0.045811</td>
+      <td>-0.003707</td>
+      <td>-0.014106</td>
+      <td>-0.011261</td>
+      <td>...</td>
+      <td>-0.004650</td>
+      <td>-0.028348</td>
+      <td>-0.023558</td>
+      <td>0.014041</td>
+      <td>0.017976</td>
+      <td>0.035963</td>
+      <td>0.006839</td>
+      <td>0.008787</td>
+      <td>0.022339</td>
+      <td>-0.032900</td>
+    </tr>
+    <tr>
+      <th>CardiovascularDisease</th>
+      <td>0.017675</td>
+      <td>-0.015284</td>
+      <td>0.034577</td>
+      <td>0.002347</td>
+      <td>0.007528</td>
+      <td>-0.005467</td>
+      <td>0.027955</td>
+      <td>-0.023632</td>
+      <td>0.003976</td>
+      <td>-0.015220</td>
+      <td>...</td>
+      <td>-0.041270</td>
+      <td>0.031061</td>
+      <td>-0.016803</td>
+      <td>-0.012918</td>
+      <td>0.017658</td>
+      <td>0.025237</td>
+      <td>-0.032343</td>
+      <td>0.024684</td>
+      <td>0.010170</td>
+      <td>0.031490</td>
+    </tr>
+    <tr>
+      <th>Diabetes</th>
+      <td>-0.003910</td>
+      <td>-0.005708</td>
+      <td>-0.018300</td>
+      <td>-0.019588</td>
+      <td>0.003059</td>
+      <td>-0.008980</td>
+      <td>-0.035810</td>
+      <td>0.000073</td>
+      <td>0.029880</td>
+      <td>0.009192</td>
+      <td>...</td>
+      <td>0.043548</td>
+      <td>-0.017280</td>
+      <td>-0.027927</td>
+      <td>0.022235</td>
+      <td>-0.004793</td>
+      <td>-0.004494</td>
+      <td>0.004184</td>
+      <td>-0.001466</td>
+      <td>-0.007644</td>
+      <td>-0.031508</td>
+    </tr>
+    <tr>
+      <th>Depression</th>
+      <td>0.023736</td>
+      <td>-0.008752</td>
+      <td>0.018113</td>
+      <td>-0.005411</td>
+      <td>0.027573</td>
+      <td>-0.012507</td>
+      <td>-0.039363</td>
+      <td>0.008867</td>
+      <td>-0.013533</td>
+      <td>-0.002516</td>
+      <td>...</td>
+      <td>0.019733</td>
+      <td>-0.019039</td>
+      <td>0.001316</td>
+      <td>0.006195</td>
+      <td>0.001593</td>
+      <td>0.005764</td>
+      <td>0.026044</td>
+      <td>-0.017145</td>
+      <td>0.017822</td>
+      <td>-0.005893</td>
+    </tr>
+    <tr>
+      <th>HeadInjury</th>
+      <td>-0.025100</td>
+      <td>-0.040337</td>
+      <td>0.004013</td>
+      <td>-0.009364</td>
+      <td>-0.008951</td>
+      <td>0.016288</td>
+      <td>-0.019178</td>
+      <td>-0.008301</td>
+      <td>0.025780</td>
+      <td>-0.008163</td>
+      <td>...</td>
+      <td>0.034655</td>
+      <td>-0.021329</td>
+      <td>0.047649</td>
+      <td>-0.016669</td>
+      <td>-0.031152</td>
+      <td>0.033060</td>
+      <td>-0.031417</td>
+      <td>0.010646</td>
+      <td>-0.000020</td>
+      <td>-0.021411</td>
+    </tr>
+    <tr>
+      <th>Hypertension</th>
+      <td>-0.012668</td>
+      <td>0.003954</td>
+      <td>-0.002641</td>
+      <td>0.012848</td>
+      <td>-0.016950</td>
+      <td>0.004928</td>
+      <td>-0.021124</td>
+      <td>-0.006010</td>
+      <td>0.022081</td>
+      <td>-0.043628</td>
+      <td>...</td>
+      <td>-0.028332</td>
+      <td>-0.021130</td>
+      <td>0.031700</td>
+      <td>-0.018602</td>
+      <td>-0.008634</td>
+      <td>0.033567</td>
+      <td>-0.011857</td>
+      <td>-0.002780</td>
+      <td>0.029931</td>
+      <td>0.035080</td>
+    </tr>
+    <tr>
+      <th>SystolicBP</th>
+      <td>-0.021153</td>
+      <td>-0.005324</td>
+      <td>0.011657</td>
+      <td>-0.027086</td>
+      <td>-0.016782</td>
+      <td>-0.019275</td>
+      <td>-0.024116</td>
+      <td>-0.030070</td>
+      <td>-0.004811</td>
+      <td>0.006031</td>
+      <td>...</td>
+      <td>0.013161</td>
+      <td>-0.009517</td>
+      <td>-0.012787</td>
+      <td>0.015447</td>
+      <td>0.008404</td>
+      <td>0.037500</td>
+      <td>-0.012170</td>
+      <td>-0.003598</td>
+      <td>-0.011357</td>
+      <td>-0.015615</td>
+    </tr>
+    <tr>
+      <th>DiastolicBP</th>
+      <td>-0.007634</td>
+      <td>-0.004462</td>
+      <td>-0.026059</td>
+      <td>0.010310</td>
+      <td>-0.002553</td>
+      <td>-0.002524</td>
+      <td>-0.014112</td>
+      <td>-0.008909</td>
+      <td>-0.010555</td>
+      <td>0.009539</td>
+      <td>...</td>
+      <td>0.031485</td>
+      <td>-0.006126</td>
+      <td>0.016682</td>
+      <td>-0.004836</td>
+      <td>-0.016567</td>
+      <td>-0.015098</td>
+      <td>0.001501</td>
+      <td>-0.026220</td>
+      <td>0.005857</td>
+      <td>0.005293</td>
+    </tr>
+    <tr>
+      <th>CholesterolTotal</th>
+      <td>0.004426</td>
+      <td>0.000392</td>
+      <td>-0.009568</td>
+      <td>-0.011757</td>
+      <td>-0.041598</td>
+      <td>0.001082</td>
+      <td>-0.010907</td>
+      <td>-0.033944</td>
+      <td>0.014335</td>
+      <td>-0.016790</td>
+      <td>...</td>
+      <td>-0.005345</td>
+      <td>0.013821</td>
+      <td>-0.006505</td>
+      <td>0.000775</td>
+      <td>0.037390</td>
+      <td>0.025313</td>
+      <td>-0.017469</td>
+      <td>-0.017936</td>
+      <td>-0.025326</td>
+      <td>0.006394</td>
+    </tr>
+    <tr>
+      <th>CholesterolLDL</th>
+      <td>-0.024788</td>
+      <td>0.003588</td>
+      <td>0.016271</td>
+      <td>0.007907</td>
+      <td>0.050504</td>
+      <td>0.023684</td>
+      <td>-0.007393</td>
+      <td>-0.017042</td>
+      <td>0.017789</td>
+      <td>-0.023698</td>
+      <td>...</td>
+      <td>-0.016215</td>
+      <td>-0.005737</td>
+      <td>-0.002926</td>
+      <td>-0.019380</td>
+      <td>0.020629</td>
+      <td>0.027335</td>
+      <td>0.016120</td>
+      <td>-0.011552</td>
+      <td>-0.000588</td>
+      <td>-0.031976</td>
+    </tr>
+    <tr>
+      <th>CholesterolHDL</th>
+      <td>-0.010773</td>
+      <td>0.006803</td>
+      <td>-0.005846</td>
+      <td>-0.021828</td>
+      <td>-0.008125</td>
+      <td>0.038605</td>
+      <td>-0.025567</td>
+      <td>-0.001925</td>
+      <td>-0.001993</td>
+      <td>-0.008659</td>
+      <td>...</td>
+      <td>-0.003450</td>
+      <td>0.030898</td>
+      <td>0.027170</td>
+      <td>0.005252</td>
+      <td>-0.005254</td>
+      <td>0.021054</td>
+      <td>-0.018553</td>
+      <td>-0.056947</td>
+      <td>-0.016662</td>
+      <td>0.042584</td>
+    </tr>
+    <tr>
+      <th>CholesterolTriglycerides</th>
+      <td>0.010452</td>
+      <td>-0.003062</td>
+      <td>-0.012427</td>
+      <td>-0.007173</td>
+      <td>-0.025763</td>
+      <td>-0.018001</td>
+      <td>-0.021058</td>
+      <td>0.023362</td>
+      <td>0.027416</td>
+      <td>0.034734</td>
+      <td>...</td>
+      <td>-0.009207</td>
+      <td>-0.014484</td>
+      <td>0.010310</td>
+      <td>0.023546</td>
+      <td>-0.013631</td>
+      <td>-0.013222</td>
+      <td>-0.017733</td>
+      <td>-0.041899</td>
+      <td>0.003526</td>
+      <td>0.022672</td>
+    </tr>
+    <tr>
+      <th>MMSE</th>
+      <td>-0.006777</td>
+      <td>-0.004235</td>
+      <td>0.025330</td>
+      <td>-0.012504</td>
+      <td>0.026090</td>
+      <td>-0.003477</td>
+      <td>0.002139</td>
+      <td>-0.011424</td>
+      <td>-0.008342</td>
+      <td>0.021636</td>
+      <td>...</td>
+      <td>0.024932</td>
+      <td>0.007652</td>
+      <td>0.025408</td>
+      <td>0.003359</td>
+      <td>0.003763</td>
+      <td>0.036715</td>
+      <td>0.034492</td>
+      <td>0.003294</td>
+      <td>0.011848</td>
+      <td>-0.237126</td>
+    </tr>
+    <tr>
+      <th>FunctionalAssessment</th>
+      <td>0.025033</td>
+      <td>0.005508</td>
+      <td>0.033324</td>
+      <td>-0.004704</td>
+      <td>0.020269</td>
+      <td>-0.030501</td>
+      <td>-0.031879</td>
+      <td>-0.016483</td>
+      <td>-0.002419</td>
+      <td>-0.009700</td>
+      <td>...</td>
+      <td>1.000000</td>
+      <td>0.002320</td>
+      <td>-0.021941</td>
+      <td>0.053904</td>
+      <td>-0.023118</td>
+      <td>-0.007193</td>
+      <td>0.024260</td>
+      <td>0.019805</td>
+      <td>0.019387</td>
+      <td>-0.364898</td>
+    </tr>
+    <tr>
+      <th>MemoryComplaints</th>
+      <td>0.005748</td>
+      <td>0.012343</td>
+      <td>0.003880</td>
+      <td>0.003687</td>
+      <td>-0.000165</td>
+      <td>0.029293</td>
+      <td>0.020339</td>
+      <td>-0.029418</td>
+      <td>0.008709</td>
+      <td>0.012537</td>
+      <td>...</td>
+      <td>0.002320</td>
+      <td>1.000000</td>
+      <td>-0.009765</td>
+      <td>-0.037511</td>
+      <td>-0.007749</td>
+      <td>0.013442</td>
+      <td>-0.030096</td>
+      <td>0.044151</td>
+      <td>-0.006961</td>
+      <td>0.306742</td>
+    </tr>
+    <tr>
+      <th>BehavioralProblems</th>
+      <td>-0.033700</td>
+      <td>0.038973</td>
+      <td>0.006099</td>
+      <td>-0.019363</td>
+      <td>0.010473</td>
+      <td>0.035276</td>
+      <td>-0.014763</td>
+      <td>0.013657</td>
+      <td>-0.014253</td>
+      <td>-0.014033</td>
+      <td>...</td>
+      <td>-0.021941</td>
+      <td>-0.009765</td>
+      <td>1.000000</td>
+      <td>0.043376</td>
+      <td>-0.022676</td>
+      <td>-0.022154</td>
+      <td>-0.002892</td>
+      <td>-0.019174</td>
+      <td>0.023374</td>
+      <td>0.224350</td>
+    </tr>
+    <tr>
+      <th>ADL</th>
+      <td>-0.019787</td>
+      <td>-0.038658</td>
+      <td>0.003865</td>
+      <td>0.010475</td>
+      <td>0.031934</td>
+      <td>-0.009788</td>
+      <td>-0.029233</td>
+      <td>-0.008250</td>
+      <td>-0.013324</td>
+      <td>-0.007888</td>
+      <td>...</td>
+      <td>0.053904</td>
+      <td>-0.037511</td>
+      <td>0.043376</td>
+      <td>1.000000</td>
+      <td>0.012373</td>
+      <td>0.002256</td>
+      <td>-0.016128</td>
+      <td>-0.025646</td>
+      <td>-0.002595</td>
+      <td>-0.332346</td>
+    </tr>
+    <tr>
+      <th>Confusion</th>
+      <td>0.004430</td>
+      <td>0.009002</td>
+      <td>-0.030583</td>
+      <td>0.022431</td>
+      <td>-0.008168</td>
+      <td>-0.015859</td>
+      <td>0.004498</td>
+      <td>-0.032798</td>
+      <td>-0.009397</td>
+      <td>0.002628</td>
+      <td>...</td>
+      <td>-0.023118</td>
+      <td>-0.007749</td>
+      <td>-0.022676</td>
+      <td>0.012373</td>
+      <td>1.000000</td>
+      <td>0.007034</td>
+      <td>-0.001573</td>
+      <td>-0.022003</td>
+      <td>0.010100</td>
+      <td>-0.019186</td>
+    </tr>
+    <tr>
+      <th>Disorientation</th>
+      <td>0.010772</td>
+      <td>0.027523</td>
+      <td>0.017506</td>
+      <td>-0.018132</td>
+      <td>-0.017568</td>
+      <td>-0.031840</td>
+      <td>-0.028403</td>
+      <td>0.015521</td>
+      <td>-0.020407</td>
+      <td>-0.026271</td>
+      <td>...</td>
+      <td>-0.007193</td>
+      <td>0.013442</td>
+      <td>-0.022154</td>
+      <td>0.002256</td>
+      <td>0.007034</td>
+      <td>1.000000</td>
+      <td>-0.022311</td>
+      <td>-0.020767</td>
+      <td>-0.032013</td>
+      <td>-0.024648</td>
+    </tr>
+    <tr>
+      <th>PersonalityChanges</th>
+      <td>-0.011987</td>
+      <td>-0.009470</td>
+      <td>0.025919</td>
+      <td>-0.030035</td>
+      <td>-0.019950</td>
+      <td>-0.015901</td>
+      <td>-0.009977</td>
+      <td>0.019117</td>
+      <td>-0.013629</td>
+      <td>0.029087</td>
+      <td>...</td>
+      <td>0.024260</td>
+      <td>-0.030096</td>
+      <td>-0.002892</td>
+      <td>-0.016128</td>
+      <td>-0.001573</td>
+      <td>-0.022311</td>
+      <td>1.000000</td>
+      <td>0.037686</td>
+      <td>-0.013311</td>
+      <td>-0.020627</td>
+    </tr>
+    <tr>
+      <th>DifficultyCompletingTasks</th>
+      <td>0.029727</td>
+      <td>0.013900</td>
+      <td>-0.001636</td>
+      <td>0.019363</td>
+      <td>0.013033</td>
+      <td>-0.039400</td>
+      <td>0.001741</td>
+      <td>-0.002712</td>
+      <td>0.031169</td>
+      <td>0.045737</td>
+      <td>...</td>
+      <td>0.019805</td>
+      <td>0.044151</td>
+      <td>-0.019174</td>
+      <td>-0.025646</td>
+      <td>-0.022003</td>
+      <td>-0.020767</td>
+      <td>0.037686</td>
+      <td>1.000000</td>
+      <td>-0.013386</td>
+      <td>0.009069</td>
+    </tr>
+    <tr>
+      <th>Forgetfulness</th>
+      <td>0.001448</td>
+      <td>-0.019279</td>
+      <td>-0.028537</td>
+      <td>-0.034619</td>
+      <td>-0.008685</td>
+      <td>0.071131</td>
+      <td>0.018011</td>
+      <td>-0.024121</td>
+      <td>0.009837</td>
+      <td>0.006175</td>
+      <td>...</td>
+      <td>0.019387</td>
+      <td>-0.006961</td>
+      <td>0.023374</td>
+      <td>-0.002595</td>
+      <td>0.010100</td>
+      <td>-0.032013</td>
+      <td>-0.013311</td>
+      <td>-0.013386</td>
+      <td>1.000000</td>
+      <td>-0.000354</td>
+    </tr>
+    <tr>
+      <th>Diagnosis</th>
+      <td>0.041019</td>
+      <td>-0.005488</td>
+      <td>-0.020975</td>
+      <td>-0.014782</td>
+      <td>-0.043966</td>
+      <td>0.026343</td>
+      <td>-0.004865</td>
+      <td>-0.007618</td>
+      <td>0.005945</td>
+      <td>0.008506</td>
+      <td>...</td>
+      <td>-0.364898</td>
+      <td>0.306742</td>
+      <td>0.224350</td>
+      <td>-0.332346</td>
+      <td>-0.019186</td>
+      <td>-0.024648</td>
+      <td>-0.020627</td>
+      <td>0.009069</td>
+      <td>-0.000354</td>
+      <td>1.000000</td>
+    </tr>
+  </tbody>
+</table>
+<p>34 rows × 34 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">strong_features</span> <span class="o">=</span> <span class="n">diagnosis_corr</span><span class="p">[</span><span class="n">diagnosis_corr</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="mf">0.1</span><span class="p">]</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;Diagnosis&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Strong features:&quot;</span><span class="p">,</span> <span class="n">strong_features</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Strong features: [&#39;MemoryComplaints&#39;, &#39;BehavioralProblems&#39;, &#39;MMSE&#39;, &#39;ADL&#39;, &#39;FunctionalAssessment&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">irrelevant_features</span> <span class="o">=</span> <span class="n">diagnosis_corr</span><span class="p">[</span><span class="n">diagnosis_corr</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mf">0.1</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">data_cleaned</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">irrelevant_features</span><span class="p">)</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;irrelevant_features:&quot;</span><span class="p">,</span> <span class="n">irrelevant_features</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>irrelevant_features: [&#39;CholesterolHDL&#39;, &#39;PatientID&#39;, &#39;Hypertension&#39;, &#39;CardiovascularDisease&#39;, &#39;BMI&#39;, &#39;CholesterolTriglycerides&#39;, &#39;DifficultyCompletingTasks&#39;, &#39;DietQuality&#39;, &#39;CholesterolTotal&#39;, &#39;PhysicalActivity&#39;, &#39;DiastolicBP&#39;, &#39;Forgetfulness&#39;, &#39;Smoking&#39;, &#39;Age&#39;, &#39;Depression&#39;, &#39;AlcoholConsumption&#39;, &#39;Ethnicity&#39;, &#39;SystolicBP&#39;, &#39;Confusion&#39;, &#39;PersonalityChanges&#39;, &#39;Gender&#39;, &#39;HeadInjury&#39;, &#39;Disorientation&#39;, &#39;Diabetes&#39;, &#39;CholesterolLDL&#39;, &#39;FamilyHistoryAlzheimers&#39;, &#39;EducationLevel&#39;, &#39;SleepQuality&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">final_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">strong_features</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;Diagnosis&quot;</span><span class="p">]]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">final_data</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>MemoryComplaints</th>
+      <th>BehavioralProblems</th>
+      <th>MMSE</th>
+      <th>ADL</th>
+      <th>FunctionalAssessment</th>
+      <th>Diagnosis</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>0</td>
+      <td>21.463532</td>
+      <td>1.725883</td>
+      <td>6.518877</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0</td>
+      <td>0</td>
+      <td>20.613267</td>
+      <td>2.592424</td>
+      <td>7.118696</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>0</td>
+      <td>7.356249</td>
+      <td>7.119548</td>
+      <td>5.895077</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0</td>
+      <td>1</td>
+      <td>13.991127</td>
+      <td>6.481226</td>
+      <td>8.965106</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0</td>
+      <td>0</td>
+      <td>13.517609</td>
+      <td>0.014691</td>
+      <td>6.045039</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2144</th>
+      <td>0</td>
+      <td>0</td>
+      <td>1.201190</td>
+      <td>4.492838</td>
+      <td>0.238667</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2145</th>
+      <td>0</td>
+      <td>1</td>
+      <td>6.458060</td>
+      <td>9.204952</td>
+      <td>8.687480</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2146</th>
+      <td>0</td>
+      <td>0</td>
+      <td>17.011003</td>
+      <td>5.036334</td>
+      <td>1.972137</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2147</th>
+      <td>0</td>
+      <td>0</td>
+      <td>4.030491</td>
+      <td>3.785399</td>
+      <td>5.173891</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2148</th>
+      <td>0</td>
+      <td>1</td>
+      <td>11.114777</td>
+      <td>8.327563</td>
+      <td>6.307543</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+<p>2149 rows × 6 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">final_data</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;data/alzheimers_disease_cleaned.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">final_data</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;FunctionalAssessment&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Diagnosis&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Functional Assessment by Diagnosis Category&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/85b1aecb394bee4b0f8b7943ab871daef245b37e7b0308fa07c3f91dea53e42c.png" src="_images/85b1aecb394bee4b0f8b7943ab871daef245b37e7b0308fa07c3f91dea53e42c.png" />
+</div>
+</div>
+<p>The boxplot clearly shows that individuals diagnosed with Alzheimer’s tend to have lower Functional Assessment scores compared to those without a diagnosis. This supports the correlation analysis, suggesting that decreased functional ability is a significant indicator of Alzheimer’s disease.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">final_data</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;ADL&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Diagnosis&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;ADL by Diagnosis Category&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/1a02936fc4f1aaf6665c3a4c8c57f2bd80aebcd66d73b29160168e4e9dd1d1dc.png" src="_images/1a02936fc4f1aaf6665c3a4c8c57f2bd80aebcd66d73b29160168e4e9dd1d1dc.png" />
+</div>
+</div>
+<p>The boxplot shows that individuals diagnosed with Alzheimer’s generally have lower ADL scores, reflecting greater difficulty with daily living tasks. This supports its negative correlation with diagnosis and highlights ADL as an important functional marker for early detection of Alzheimer’s disease.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">final_data</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;MMSE&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Diagnosis&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;MMSE by Diagnosis Category&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/39ecb7c8354984454ef25795ed6634a9fb1778137d9c67f9f5b823eb3ff574bd.png" src="_images/39ecb7c8354984454ef25795ed6634a9fb1778137d9c67f9f5b823eb3ff574bd.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Age_Group&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Age&#39;</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">65</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">90</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;&lt;65&#39;</span><span class="p">,</span> <span class="s1">&#39;65-75&#39;</span><span class="p">,</span> <span class="s1">&#39;75+&#39;</span><span class="p">])</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Age_Group&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;MMSE&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Diagnosis&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;MMSE by Age Group and Diagnosis&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Age Group&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;MMSE Score&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/c99fd5dcf8dec996949427ff759bfba3aa00665c51ba027c09e92d3d72e800f3.png" src="_images/c99fd5dcf8dec996949427ff759bfba3aa00665c51ba027c09e92d3d72e800f3.png" />
+</div>
+</div>
+<p>This boxplot compares MMSE scores across age groups for both diagnosed and non-diagnosed individuals.
+Regardless of age, people diagnosed with Alzheimer’s consistently have lower MMSE scores, confirming MMSE’s value as a key indicator of cognitive decline.
+The gap between diagnosed and non-diagnosed individuals is visible in all age groups, reinforcing that cognitive decline—not just age—is the stronger predictor of diagnosis.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">countplot</span><span class="p">(</span><span class="n">final_data</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Diagnosis&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BehavioralProblems&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Distribution of Behavioral Problems by Diagnosis Categories&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/623e09c132cdcdca6c460c007895a3c6307031b6cd045a7c1d219520a108b47d.png" src="_images/623e09c132cdcdca6c460c007895a3c6307031b6cd045a7c1d219520a108b47d.png" />
+</div>
+</div>
+<p>This chart compares the presence of behavioral problems between individuals with and without an Alzheimer’s diagnosis.</p>
+<p>Most individuals without Alzheimer’s (Diagnosis = 0) do not have behavioral problems.</p>
+<p>In contrast, a larger proportion of individuals diagnosed with Alzheimer’s (Diagnosis = 1) show behavioral problems.</p>
+<p>Although not all diagnosed individuals exhibit behavioral issues, the data shows that behavioral problems are more commonly found among those with Alzheimer’s.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">countplot</span><span class="p">(</span><span class="n">final_data</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Diagnosis&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;MemoryComplaints&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Distribution of Memory Complaints by Diagnosis Categories&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/1dfad1399b70f4b389550bbff04af2c8ec4f28c3ab073d1782efb5f37eb5a601.png" src="_images/1dfad1399b70f4b389550bbff04af2c8ec4f28c3ab073d1782efb5f37eb5a601.png" />
+</div>
+</div>
+<p>This chart shows that memory complaints are more common in individuals diagnosed with Alzheimer’s than those without the disease.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">categories</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="n">final_data</span><span class="o">.</span><span class="n">Diagnosis</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">(</span><span class="s2">&quot;muted&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">pie</span><span class="p">(</span><span class="n">counts</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">categories</span><span class="p">,</span> <span class="n">autopct</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%1.1f%%</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">startangle</span><span class="o">=</span><span class="mi">140</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Diagnosis Distribution&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/1bf1eb21f17e4ed4fca9526c5ae4474793993a0b7bf31cf265ff87cd9058449e.png" src="_images/1bf1eb21f17e4ed4fca9526c5ae4474793993a0b7bf31cf265ff87cd9058449e.png" />
+</div>
+</div>
+<p>The dataset is moderately imbalanced, with more healthy individuals than diagnosed cases.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -415,20 +1978,20 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="data_retrieval.html"
+       href="Alzheimers_SHAP.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Data Retrieval</p>
+        <p class="prev-next-title">&lt;no title&gt;</p>
       </div>
     </a>
     <a class="right-next"
-       href="exploratory_data_analysis.html"
+       href="alzheimers_rf.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Exploratory Data Analysis</p>
+        <p class="prev-next-title">Random Forest Classifier</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -438,6 +2001,27 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Data Preprocessing</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#import-libraries">Import Libraries</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#load-csv-data-to-dataframe">Load csv data to Dataframe</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#checking-missing-values">CHECKING MISSING VALUES</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
               
             
           </div>

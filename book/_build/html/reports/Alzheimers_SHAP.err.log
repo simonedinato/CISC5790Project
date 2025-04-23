@@ -1,0 +1,109 @@
+Traceback (most recent call last):
+  File "/Users/simonedinato/Library/CloudStorage/OneDrive-FordhamUniversity/Fordham/Corsi/Data Mining/.venv/lib/python3.12/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/Users/simonedinato/Library/CloudStorage/OneDrive-FordhamUniversity/Fordham/Corsi/Data Mining/.venv/lib/python3.12/site-packages/nbclient/client.py", line 1319, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/simonedinato/Library/CloudStorage/OneDrive-FordhamUniversity/Fordham/Corsi/Data Mining/.venv/lib/python3.12/site-packages/jupyter_core/utils/__init__.py", line 165, in wrapped
+    return loop.run_until_complete(inner)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.5/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/simonedinato/Library/CloudStorage/OneDrive-FordhamUniversity/Fordham/Corsi/Data Mining/.venv/lib/python3.12/site-packages/nbclient/client.py", line 709, in async_execute
+    await self.async_execute_cell(
+  File "/Users/simonedinato/Library/CloudStorage/OneDrive-FordhamUniversity/Fordham/Corsi/Data Mining/.venv/lib/python3.12/site-packages/nbclient/client.py", line 1062, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/Users/simonedinato/Library/CloudStorage/OneDrive-FordhamUniversity/Fordham/Corsi/Data Mining/.venv/lib/python3.12/site-packages/nbclient/client.py", line 918, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+shap.initjs()
+
+#import data
+df_raw = pd.read_csv("data/alzheimers_disease_data_oversampled.csv")
+
+#remove PatientID and DoctorInCharge cols so they don't get used in RF
+df_raw.drop(["PatientID","DoctorInCharge"], axis=1, inplace=True)
+
+#create X and y variables
+df_train = df_raw.drop(["Diagnosis"],axis=1)
+df_test = df_raw["Diagnosis"]
+
+#Normalize data
+scaler = MaxAbsScaler()
+train_scaler = scaler.fit_transform(df_train)
+df_norm = pd.DataFrame(train_scaler)
+df_norm.columns = df_train.columns
+
+#Create train/test split
+x_train, x_test, y_train, y_test = train_test_split(df_norm, df_test, 
+                                                    test_size=0.2, random_state=42)
+#create rf classifier
+clf = RandomForestClassifier()
+clf.fit(x_train, y_train)
+clf.score(x_test, y_test)
+y_pred = clf.predict(x_test)
+
+#create SHAP values
+explainer = shap.Explainer(clf, x_test)
+shap_values = explainer(x_test)
+
+#plot SHAP
+shap.plots.beeswarm(shap_values[:, :, 1], max_display=33)
+
+------------------
+
+----- stderr -----
+ 74%|===============     | 821/1112 [00:11<00:03]
+----- stderr -----
+ 81%|================    | 900/1112 [00:12<00:02]
+----- stderr -----
+ 88%|==================  | 979/1112 [00:13<00:01]
+----- stderr -----
+ 95%|=================== | 1058/1112 [00:14<00:00]
+------------------
+
+[31m---------------------------------------------------------------------------[39m
+[31mExplainerError[39m                            Traceback (most recent call last)
+[36mCell[39m[36m [39m[32mIn[2][39m[32m, line 30[39m
+[32m     28[39m [38;5;66;03m#create SHAP values[39;00m
+[32m     29[39m explainer = shap.Explainer(clf, x_test)
+[32m---> [39m[32m30[39m shap_values = [43mexplainer[49m[43m([49m[43mx_test[49m[43m)[49m
+[32m     32[39m [38;5;66;03m#plot SHAP[39;00m
+[32m     33[39m shap.plots.beeswarm(shap_values[:, :, [32m1[39m], max_display=[32m33[39m)
+
+[36mFile [39m[32m~/Library/CloudStorage/OneDrive-FordhamUniversity/Fordham/Corsi/Data Mining/.venv/lib/python3.12/site-packages/shap/explainers/_tree.py:380[39m, in [36mTreeExplainer.__call__[39m[34m(self, X, y, interactions, check_additivity, approximate)[39m
+[32m    377[39m     feature_names = [38;5;28mgetattr[39m([38;5;28mself[39m, [33m"[39m[33mdata_feature_names[39m[33m"[39m, [38;5;28;01mNone[39;00m)
+[32m    379[39m [38;5;28;01mif[39;00m [38;5;129;01mnot[39;00m interactions:
+[32m--> [39m[32m380[39m     v = [38;5;28;43mself[39;49m[43m.[49m[43mshap_values[49m[43m([49m[43mX[49m[43m,[49m[43m [49m[43my[49m[43m=[49m[43my[49m[43m,[49m[43m [49m[43mfrom_call[49m[43m=[49m[38;5;28;43;01mTrue[39;49;00m[43m,[49m[43m [49m[43mcheck_additivity[49m[43m=[49m[43mcheck_additivity[49m[43m,[49m[43m [49m[43mapproximate[49m[43m=[49m[43mapproximate[49m[43m)[49m
+[32m    381[39m     [38;5;28;01mif[39;00m [38;5;28misinstance[39m(v, [38;5;28mlist[39m):
+[32m    382[39m         v = np.stack(v, axis=-[32m1[39m)  [38;5;66;03m# put outputs at the end[39;00m
+
+[36mFile [39m[32m~/Library/CloudStorage/OneDrive-FordhamUniversity/Fordham/Corsi/Data Mining/.venv/lib/python3.12/site-packages/shap/explainers/_tree.py:672[39m, in [36mTreeExplainer.shap_values[39m[34m(self, X, y, tree_limit, approximate, check_additivity, from_call)[39m
+[32m    670[39m out = [38;5;28mself[39m._get_shap_output(phi, flat_output)
+[32m    671[39m [38;5;28;01mif[39;00m check_additivity [38;5;129;01mand[39;00m [38;5;28mself[39m.model.model_output == [33m"[39m[33mraw[39m[33m"[39m:
+[32m--> [39m[32m672[39m     [38;5;28;43mself[39;49m[43m.[49m[43massert_additivity[49m[43m([49m[43mout[49m[43m,[49m[43m [49m[38;5;28;43mself[39;49m[43m.[49m[43mmodel[49m[43m.[49m[43mpredict[49m[43m([49m[43mX[49m[43m)[49m[43m)[49m
+[32m    674[39m [38;5;66;03m# This statements handles the case of multiple outputs[39;00m
+[32m    675[39m [38;5;66;03m# e.g. a multi-class classification problem, multi-target regression problem[39;00m
+[32m    676[39m [38;5;66;03m# in this case the output shape corresponds to [num_samples, num_features, num_outputs][39;00m
+[32m    677[39m [38;5;28;01mif[39;00m [38;5;28misinstance[39m(out, [38;5;28mlist[39m):
+
+[36mFile [39m[32m~/Library/CloudStorage/OneDrive-FordhamUniversity/Fordham/Corsi/Data Mining/.venv/lib/python3.12/site-packages/shap/explainers/_tree.py:856[39m, in [36mTreeExplainer.assert_additivity[39m[34m(self, phi, model_output)[39m
+[32m    854[39m [38;5;28;01mif[39;00m [38;5;28misinstance[39m(phi, [38;5;28mlist[39m):
+[32m    855[39m     [38;5;28;01mfor[39;00m i [38;5;129;01min[39;00m [38;5;28mrange[39m([38;5;28mlen[39m(phi)):
+[32m--> [39m[32m856[39m         [43mcheck_sum[49m[43m([49m[38;5;28;43mself[39;49m[43m.[49m[43mexpected_value[49m[43m[[49m[43mi[49m[43m][49m[43m [49m[43m+[49m[43m [49m[43mphi[49m[43m[[49m[43mi[49m[43m][49m[43m.[49m[43msum[49m[43m([49m[43m-[49m[32;43m1[39;49m[43m)[49m[43m,[49m[43m [49m[43mmodel_output[49m[43m[[49m[43m:[49m[43m,[49m[43m [49m[43mi[49m[43m][49m[43m)[49m
+[32m    857[39m [38;5;28;01melse[39;00m:
+[32m    858[39m     check_sum([38;5;28mself[39m.expected_value + phi.sum(-[32m1[39m), model_output)
+
+[36mFile [39m[32m~/Library/CloudStorage/OneDrive-FordhamUniversity/Fordham/Corsi/Data Mining/.venv/lib/python3.12/site-packages/shap/explainers/_tree.py:852[39m, in [36mTreeExplainer.assert_additivity.<locals>.check_sum[39m[34m(sum_val, model_output)[39m
+[32m    846[39m     err_msg += [33m"[39m[33m Consider retrying with the feature_perturbation=[39m[33m'[39m[33minterventional[39m[33m'[39m[33m option.[39m[33m"[39m
+[32m    847[39m err_msg += (
+[32m    848[39m     [33m"[39m[33m This check failed because for one of the samples the sum of the SHAP values[39m[33m"[39m
+[32m    849[39m     [33mf[39m[33m"[39m[33m was [39m[38;5;132;01m{[39;00msum_val[ind][38;5;132;01m:[39;00m[33mf[39m[38;5;132;01m}[39;00m[33m, while the model output was [39m[38;5;132;01m{[39;00mmodel_output[ind][38;5;132;01m:[39;00m[33mf[39m[38;5;132;01m}[39;00m[33m. If this[39m[33m"[39m
+[32m    850[39m     [33m"[39m[33m difference is acceptable you can set check_additivity=False to disable this check.[39m[33m"[39m
+[32m    851[39m )
+[32m--> [39m[32m852[39m [38;5;28;01mraise[39;00m ExplainerError(err_msg)
+
+[31mExplainerError[39m: Additivity check failed in TreeExplainer! Please ensure the data matrix you passed to the explainer is the same shape that the model was trained on. If your data shape is correct then please report this on GitHub. This check failed because for one of the samples the sum of the SHAP values was 0.850200, while the model output was 0.870000. If this difference is acceptable you can set check_additivity=False to disable this check.
+
