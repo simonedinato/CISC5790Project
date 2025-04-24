@@ -1,6 +1,7 @@
 # CISC5790 - Alzheimer's Disease Data Analysis
 
-This repository contains a Jupyter Book that explores Alzheimer's disease data analysis using various machine learning techniques, including data retrieval, preprocessing, and multiple classification models.
+This repository contains a Jupyter Book that explores Alzheimer's disease data analysis using various machine learning techniques, including data retrieval, preprocessing, and multiple classification models. Further details on the project's goals, analysis, and approach can be found on this site:
+https://averdone.github.io/CISC5790Project/introduction.html
 
 ## Repository Structure
 
