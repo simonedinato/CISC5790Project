@@ -182,11 +182,13 @@
         </ul>
         <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="data_retrieval.html">Data Retrieval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="data_preprocessing.html">Data Preprocessing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="exploratory_data_analysis.html">Exploratory Data Analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="RandomForest.html">Random Forest</a></li>
-<li class="toctree-l1"><a class="reference internal" href="AdaBoosting.html">Ada Boosting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Clustering.html">Clustering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Preprocessing.html">Data Preprocessing</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Decision%20Tree.html">Bagging Decision Tree Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RandomForest.html">Random Forest Classifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stacking.html">Stacking Models</a></li>
 </ul>
 
     </div>
@@ -384,7 +386,6 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#our-goals">Our Goals</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset-overview">Dataset Overview</a></li>
 </ul>
             </nav>
         </div>
@@ -401,35 +402,17 @@ document.write(`
 <p>This project is a key component of the CISC5790 course, which emphasizes the application of data science techniques to real-world problems. Our team, consisting of four members, has undertaken this project to analyze a health-related dataset, uncover actionable insights, and develop predictive models. This endeavor provides a practical opportunity to apply the data science skills and methodologies we have acquired throughout the course, including data preprocessing, exploratory analysis, and machine learning.</p>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
-<p>The dataset selected for this project is the “Alzheimer’s Disease Dataset” by Rabie El Kharoua, sourced from Kaggle (<a class="reference external" href="https://www.kaggle.com/datasets/rabieelkharoua/alzheimers-disease-dataset">https://www.kaggle.com/datasets/rabieelkharoua/alzheimers-disease-dataset</a>). It contains detailed health-related information for patients, encompassing demographic details, lifestyle factors, medical history, clinical measurements, cognitive assessments, and behavioral indicators. We chose this dataset because it offers a robust set of 34 features and 2,149 records, providing a solid foundation for applying various data science algorithms. The dataset focuses on Alzheimer’s disease, with a binary target variable (<code class="docutils literal notranslate"><span class="pre">Diagnosis</span></code>) indicating the presence or absence of the condition, making it an ideal candidate for investigating predictors of Alzheimer’s disease through binary classification.</p>
+<p>The dataset selected for this project is the “Alzheimer’s Disease Dataset” by Rabie El Kharoua, sourced from Kaggle (<a class="reference external" href="https://www.kaggle.com/datasets/rabieelkharoua/alzheimers-disease-dataset">https://www.kaggle.com/datasets/rabieelkharoua/alzheimers-disease-dataset</a>). It contains detailed health-related information for patients, encompassing demographic details, lifestyle factors, medical history, clinical measurements, cognitive assessments, and behavioral indicators. We chose this dataset because it offers a robust set of features and rows, providing a solid foundation for applying various data science algorithms. The dataset focuses on Alzheimer’s disease, with a binary target variable (<code class="docutils literal notranslate"><span class="pre">Diagnosis</span></code>) indicating the presence or absence of the condition, making it an ideal candidate for investigating predictors of Alzheimer’s disease through binary classification.</p>
 </section>
 <section id="our-goals">
 <h2>Our Goals<a class="headerlink" href="#our-goals" title="Link to this heading">#</a></h2>
 <p>Our primary objective is to analyze this health dataset to identify meaningful patterns and relationships among the variables, with a focus on understanding factors associated with Alzheimer’s disease. Specifically, we aim to:</p>
 <ul class="simple">
-<li><p>Conduct thorough exploratory data analysis (EDA) to uncover trends, correlations, and potential predictors of Alzheimer’s disease, such as the role of cognitive metrics like the Mini-Mental State Examination (MMSE) score.</p></li>
-<li><p>Build and evaluate a predictive model to accurately classify patients as having Alzheimer’s disease (1) or not (0), targeting an F1-score of at least 90% for both classes despite potential class imbalances.</p></li>
+<li><p>Conduct thorough exploratory data analysis (EDA) to uncover trends, correlations, and potential predictors of Alzheimer’s disease.</p></li>
+<li><p>Build and evaluate a predictive model to accurately classify patients as having Alzheimer’s disease (1) or not (0).</p></li>
 <li><p>Identify the most influential features contributing to Alzheimer’s diagnosis through feature importance analysis, providing insights that could inform clinical understanding and decision-making.</p></li>
 </ul>
 <p>As we progress, we will refine these objectives based on insights gained during EDA and model development, potentially exploring additional models or feature engineering techniques to enhance performance.</p>
-</section>
-<section id="dataset-overview">
-<h2>Dataset Overview<a class="headerlink" href="#dataset-overview" title="Link to this heading">#</a></h2>
-<p>The dataset comprises 2,149 patient records, each with 35 columns (34 features and 1 target variable). The features include:</p>
-<ul class="simple">
-<li><p><strong>Demographic Information:</strong> PatientID, Age, Gender, Ethnicity, and EducationLevel.</p></li>
-<li><p><strong>Lifestyle Factors:</strong> BMI, Smoking, AlcoholConsumption, PhysicalActivity, DietQuality, and SleepQuality.</p></li>
-<li><p><strong>Medical History:</strong> FamilyHistoryAlzheimers, CardiovascularDisease, Diabetes, Depression, HeadInjury, and Hypertension.</p></li>
-<li><p><strong>Clinical Measurements:</strong> SystolicBP, DiastolicBP, CholesterolTotal, CholesterolLDL, CholesterolHDL, and CholesterolTriglycerides.</p></li>
-<li><p><strong>Cognitive and Functional Assessments:</strong> MMSE, FunctionalAssessment, MemoryComplaints, BehavioralProblems, and ADL.</p></li>
-<li><p><strong>Behavioral Indicators:</strong> Confusion, Disorientation, PersonalityChanges, DifficultyCompletingTasks, and Forgetfulness.</p></li>
-<li><p><strong>Metadata:</strong> DoctorInCharge.</p></li>
-</ul>
-<p>The target variable, <code class="docutils literal notranslate"><span class="pre">Diagnosis</span></code>, is binary:</p>
-<ul class="simple">
-<li><p>0: No Alzheimer’s (healthy or non-demented)</p></li>
-<li><p>1: Alzheimer’s (demented)</p></li>
-</ul>
 </section>
 <div class="toctree-wrapper compound">
 </div>
@@ -492,7 +475,6 @@ document.write(`
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#our-goals">Our Goals</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset-overview">Dataset Overview</a></li>
 </ul>
   </nav></div>
 

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Random Forest &#8212; CISC5790 - Alzheimer&#39;s Disease Data Analysis</title>
+    <title>Random Forest Classifier &#8212; CISC5790 - Alzheimer&#39;s Disease Data Analysis</title>
   
   
   
@@ -60,8 +60,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'RandomForest';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Ada Boosting" href="AdaBoosting.html" />
-    <link rel="prev" title="Exploratory Data Analysis" href="exploratory_data_analysis.html" />
+    <link rel="next" title="Stacking Models" href="stacking.html" />
+    <link rel="prev" title="Bagging Decision Tree Model" href="Decision%20Tree.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -181,11 +181,13 @@
         </ul>
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="data_retrieval.html">Data Retrieval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="data_preprocessing.html">Data Preprocessing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="exploratory_data_analysis.html">Exploratory Data Analysis</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Random Forest</a></li>
-<li class="toctree-l1"><a class="reference internal" href="AdaBoosting.html">Ada Boosting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Clustering.html">Clustering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Preprocessing.html">Data Preprocessing</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Decision%20Tree.html">Bagging Decision Tree Model</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Random Forest Classifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stacking.html">Stacking Models</a></li>
 </ul>
 
     </div>
@@ -358,7 +360,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -369,11 +373,48 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Random Forest</h1>
+    <h1>Random Forest Classifier</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#random-forest-considerations">Random Forest Considerations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-testing"><span style="color:green"> <strong>Initial Testing</strong> </span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-conclusion"><span style="color:green"> <em><strong>Initial Conclusion</strong></em> </span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#determining-n-trees-for-random-forest-classifier"><span style="color:blue"> <strong>Determining N Trees for Random Forest Classifier</strong> </span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cross-validation"><span style="color:purple"> <strong>Cross Validation</strong> </span></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#determining-folds"><span style="color:purple"> 1. Determining # Folds</span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calculating-average-cv-score"><span style="color:purple"> 2. Calculating Average CV Score</span></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cross-validation-conclusion"><span style="color:purple"> <em><strong>Cross Validation Conclusion</strong></em> </span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#balancing-data"><span style="color:red"> <strong>Balancing Data</strong> </span></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-oversampling"><span style="color:red"> 1A. Oversampling </span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#b-oversampling-cv"><span style="color:red"> 1B. Oversampling + CV </span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-bagging"><span style="color:red"> 2A. Bagging </span></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#determining-bags"><span style="color:red"> Determining # Bags</span></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><span style="color:red"> 2A. Bagging </span></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#calculating-average-bagging-score"><span style="color:red"> Calculating Average Bagging Score</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#balancing-data-conclusion"><span style="color:red"> <em><strong>Balancing Data Conclusion</strong></em> </span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#feature-selection"><strong>Feature Selection</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#option-1-remove-only-the-most-irrelevant-features">Option 1: Remove only the most irrelevant features</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#option-2-keep-only-the-most-relevant-features">Option 2: Keep only the most relevant features</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#feature-selection-conclusion"><em><strong>Feature Selection Conclusion</strong></em></a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -383,8 +424,716 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="random-forest">
-<h1>Random Forest<a class="headerlink" href="#random-forest" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="random-forest-classifier">
+<h1>Random Forest Classifier<a class="headerlink" href="#random-forest-classifier" title="Link to this heading">#</a></h1>
+<p>The Random Forest Classifier was chosen to run on this dataset because it is one of the most effective models for classification tasks. The objective of this model will be to classify whether a patient is diagnosed with Alzheimers. There are several things to consider when creating a random forest classifier.</p>
+<section id="random-forest-considerations">
+<h2>Random Forest Considerations<a class="headerlink" href="#random-forest-considerations" title="Link to this heading">#</a></h2>
+<ol class="arabic">
+<li><p><strong>Number of Decision Trees</strong></p>
+<ul class="simple">
+<li><p>The number of decision trees that the random forest model uses will be determined by testing different numbers of decision trees (10, 20, 30,…,200) and selecting the number that produces the highest % accuracy.</p></li>
+</ul>
+</li>
+<li><p><strong>Train | Test Split</strong></p>
+<ul class="simple">
+<li><p>Cross Validation was chosen as a method to split the data into a training and testing set because it maximizes the amount of data that the classifier can use for testing.</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p><em>Cross Validation</em></p></li>
+<li><p><em>80/20 Split</em></p></li>
+</ol>
+</li>
+<li><p><strong>Balancing Data</strong></p>
+<ul class="simple">
+<li><p>The data has aproximately twice as many negative examples as it does positive examples. (1,389 neg, 760 pos)</p></li>
+<li><p>Two different data balancing techniques will be tested and the balancing technique that produces the best performance will be chosen for the final model.</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p><em>Oversampling</em></p></li>
+<li><p><em>Bagging</em></p></li>
+</ol>
+</li>
+<li><p><strong>Feature Selection</strong></p>
+<ol class="arabic simple">
+<li><p><em>Removing irrelevant features</em></p></li>
+</ol>
+</li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span><span class="p">,</span> <span class="n">cross_val_score</span><span class="p">,</span> <span class="n">KFold</span><span class="p">,</span> <span class="n">cross_validate</span><span class="p">,</span> <span class="n">cross_val_predict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestClassifier</span><span class="p">,</span> <span class="n">BaggingClassifier</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">MaxAbsScaler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">confusion_matrix</span><span class="p">,</span> <span class="n">ConfusionMatrixDisplay</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_pipeline</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="initial-testing">
+<h2><span style="color:green"> <strong>Initial Testing</strong> </span><a class="headerlink" href="#initial-testing" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Before altering the model or data in any way, the random forest model was run to get a baseline for its performance.</p></li>
+<li><p>Throughout testing I will use <code class="docutils literal notranslate"><span class="pre">random_state</span> <span class="pre">=</span> <span class="pre">42</span></code> when necessary for the sake of replicability and to control for random selection of data.</p>
+<ul>
+<li><p>When not explicitly controlling for random state, the models will be run 10 times and the accuracy will be averaged.</p></li>
+</ul>
+</li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#import data</span>
+<span class="n">df_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;alzheimers_disease_data.csv&quot;</span><span class="p">)</span>
+
+<span class="c1">#remove PatientID and DoctorInCharge cols so they don&#39;t get used in RF</span>
+<span class="n">df_data</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;PatientID&quot;</span><span class="p">,</span><span class="s2">&quot;DoctorInCharge&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1">#separate test and training data</span>
+<span class="n">df_X</span> <span class="o">=</span> <span class="n">df_data</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;Diagnosis&quot;</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df_y</span> <span class="o">=</span> <span class="n">df_data</span><span class="p">[</span><span class="s2">&quot;Diagnosis&quot;</span><span class="p">]</span>
+
+<span class="c1">#create training and test subsets</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">df_X</span><span class="p">,</span> <span class="n">df_y</span><span class="p">,</span> 
+                                                    <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="c1">#list for iterating trials</span>
+<span class="n">initial_trials</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">)]</span>
+
+<span class="c1">#accumulative accuracy</span>
+<span class="n">initial_acc</span> <span class="o">=</span> <span class="mi">0</span>
+
+
+<span class="k">for</span> <span class="n">trial</span> <span class="ow">in</span> <span class="n">initial_trials</span><span class="p">:</span>
+    <span class="c1">#Calculating RF classifier</span>
+    <span class="n">rf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+    <span class="n">rf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+    <span class="n">score</span> <span class="o">=</span> <span class="n">rf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+    <span class="n">initial_acc</span> <span class="o">+=</span> <span class="n">score</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Initial RF Accuracy: </span><span class="si">{</span><span class="n">initial_acc</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">initial_trials</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1">#confusion matrix</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">rf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">cm</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="n">ConfusionMatrixDisplay</span><span class="p">(</span><span class="n">confusion_matrix</span><span class="o">=</span><span class="n">cm</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Initial RF Confusion Matrix&quot;</span><span class="p">)</span>
+
+<span class="c1">#save plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;initial_rf_cm.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+
+<span class="c1"># Visualize plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initial RF Accuracy: 0.9193023255813954
+</pre></div>
+</div>
+<img alt="_images/2b0e0ce55a7547e6ea39fedf3c1014f91e1e70b5f44c8c593c88fe308fea8d69.png" src="_images/2b0e0ce55a7547e6ea39fedf3c1014f91e1e70b5f44c8c593c88fe308fea8d69.png" />
+</div>
+</div>
+</section>
+<section id="initial-conclusion">
+<h2><span style="color:green"> <em><strong>Initial Conclusion</strong></em> </span><a class="headerlink" href="#initial-conclusion" title="Link to this heading">#</a></h2>
+<p>The initial accuracy of 92% is a good indicator that the Random Forest model works well for this data set.</p>
+<p>The confusion matrix indicates that the model erred toward predicting false negatives rather than false positives.</p>
+</section>
+<section id="determining-n-trees-for-random-forest-classifier">
+<h2><span style="color:blue"> <strong>Determining N Trees for Random Forest Classifier</strong> </span><a class="headerlink" href="#determining-n-trees-for-random-forest-classifier" title="Link to this heading">#</a></h2>
+<p>Using <code class="docutils literal notranslate"><span class="pre">random_state=42</span></code> to control for randomness in selecting data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#import data</span>
+<span class="n">df_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;alzheimers_disease_data.csv&quot;</span><span class="p">)</span>
+
+<span class="c1">#remove PatiendID and DoctorInCharge cols so they don&#39;t get used in RF</span>
+<span class="n">df_data</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;PatientID&quot;</span><span class="p">,</span><span class="s2">&quot;DoctorInCharge&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1">#separate X and y variables</span>
+<span class="n">df_train</span> <span class="o">=</span> <span class="n">df_data</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;Diagnosis&quot;</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df_test</span> <span class="o">=</span> <span class="n">df_data</span><span class="p">[</span><span class="s2">&quot;Diagnosis&quot;</span><span class="p">]</span>
+
+<span class="c1">#create training and test subsets</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">df_train</span><span class="p">,</span> <span class="n">df_test</span><span class="p">,</span> 
+                                                    <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1">#list for # of decision trees</span>
+<span class="n">d_trees</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">210</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+
+<span class="c1">#storing results</span>
+<span class="n">tree_results</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">tree_acc</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">for</span> <span class="n">tree</span> <span class="ow">in</span> <span class="n">d_trees</span><span class="p">:</span>
+    <span class="n">rf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="n">tree</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+    <span class="n">rf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+    <span class="n">tree_results</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">tree</span><span class="p">,</span><span class="n">rf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span><span class="n">y_test</span><span class="p">)))</span>
+    <span class="n">tree_acc</span> <span class="o">+=</span> <span class="n">rf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span><span class="n">y_test</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;avg performance: </span><span class="si">{</span><span class="n">tree_acc</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">d_trees</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Plot of rf accuracy based on changes in estimator amount</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="c1">#get only % accurate values from tuples</span>
+<span class="n">accuracy</span> <span class="o">=</span> <span class="p">[</span><span class="n">val</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">tree_results</span><span class="p">]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">d_trees</span><span class="p">,</span> <span class="n">accuracy</span><span class="p">)</span>
+
+<span class="c1"># labels for graph</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;RF Perfomance based on # D-Trees&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;# Decision Trees&quot;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;% Accuracy&quot;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span> <span class="o">=</span> <span class="mi">16</span><span class="p">)</span>
+
+<span class="c1">#save plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;rf_num_dtrees.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+
+<span class="c1"># Visualize plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>avg performance: 0.9238372093023258
+</pre></div>
+</div>
+<img alt="_images/19ea750b0935d97aaa8ca63c3f907d24bd240660763b80b2f3dcdfde1fe52efd.png" src="_images/19ea750b0935d97aaa8ca63c3f907d24bd240660763b80b2f3dcdfde1fe52efd.png" />
+</div>
+</div>
+</section>
+<section id="cross-validation">
+<h2><span style="color:purple"> <strong>Cross Validation</strong> </span><a class="headerlink" href="#cross-validation" title="Link to this heading">#</a></h2>
+<section id="determining-folds">
+<h3><span style="color:purple"> 1. Determining # Folds</span><a class="headerlink" href="#determining-folds" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#***This cell is computationall expensive - takes about 2min ***</span>
+
+<span class="c1">#import data</span>
+<span class="n">df_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;alzheimers_disease_data.csv&quot;</span><span class="p">)</span>
+
+<span class="c1">#remove PatiendID and DoctorInCharge cols so they don&#39;t get used in RF</span>
+<span class="n">df_data</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;PatientID&quot;</span><span class="p">,</span><span class="s2">&quot;DoctorInCharge&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1">#separate data in X and y variables</span>
+<span class="n">df_X</span> <span class="o">=</span> <span class="n">df_data</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;Diagnosis&quot;</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df_y</span> <span class="o">=</span> <span class="n">df_data</span><span class="p">[</span><span class="s2">&quot;Diagnosis&quot;</span><span class="p">]</span>
+
+<span class="c1">#lists to store results from for loop</span>
+<span class="c1">#LOOCV took about 6 minutes to run and had an accuracy of about 94%</span>
+<span class="n">folds</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">150</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mi">300</span><span class="p">]</span>
+<span class="n">cv_results</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">cv_acc</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">for</span> <span class="n">fold</span> <span class="ow">in</span> <span class="n">folds</span><span class="p">:</span>
+    <span class="c1">#creating k-fold splits</span>
+    <span class="c1">#must do this because it has the shuffle feature like trian_test_split</span>
+    <span class="n">kf</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="n">fold</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    
+    <span class="c1">#Calculating RF classifier using cross validation</span>
+    <span class="n">cv_score</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">50</span><span class="p">),</span>
+                               <span class="n">df_X</span><span class="p">,</span> <span class="n">df_y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">kf</span><span class="p">)</span>
+    <span class="n">cv_results</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">fold</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">cv_score</span><span class="p">)))</span> <span class="c1">#adding results to result list</span>
+    <span class="n">cv_acc</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">cv_score</span><span class="p">)</span> <span class="c1">#averaging all fold accuracies</span>
+    
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;avg performance: </span><span class="si">{</span><span class="n">cv_acc</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">folds</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Plot of cv accuracy based on changes in fold count</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="c1">#get only % accurate values from tuples</span>
+<span class="n">accuracy</span> <span class="o">=</span> <span class="p">[</span><span class="n">val</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">cv_results</span><span class="p">]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">folds</span><span class="p">,</span> <span class="n">accuracy</span><span class="p">)</span>
+
+<span class="c1"># labels for graph</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;CV Perfomance based on K-Folds&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;# CV Folds&quot;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;% Accuracy&quot;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mf">.90</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span> <span class="o">=</span> <span class="mi">16</span><span class="p">)</span>
+
+<span class="c1">#save plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;cv_num_folds.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+
+<span class="c1"># Visualize plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>avg performance: 0.936844594442929
+</pre></div>
+</div>
+<img alt="_images/1d4912b521e05bebb89e86aab4f5f0c265ab55f8b070afd446056b8deacd9f3c.png" src="_images/1d4912b521e05bebb89e86aab4f5f0c265ab55f8b070afd446056b8deacd9f3c.png" />
+</div>
+</div>
+</section>
+<section id="calculating-average-cv-score">
+<h3><span style="color:purple"> 2. Calculating Average CV Score</span><a class="headerlink" href="#calculating-average-cv-score" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#import data</span>
+<span class="n">df_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;alzheimers_disease_data.csv&quot;</span><span class="p">)</span>
+
+<span class="c1">#remove PatiendID and DoctorInCharge cols so they don&#39;t get used in RF</span>
+<span class="n">df_data</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;PatientID&quot;</span><span class="p">,</span><span class="s2">&quot;DoctorInCharge&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1">#separate data in X and y variables</span>
+<span class="n">df_X</span> <span class="o">=</span> <span class="n">df_data</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;Diagnosis&quot;</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df_y</span> <span class="o">=</span> <span class="n">df_data</span><span class="p">[</span><span class="s2">&quot;Diagnosis&quot;</span><span class="p">]</span>
+
+<span class="c1">#accumulative accuracy</span>
+<span class="n">cv_acc</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">):</span>
+    <span class="c1">#creating k-fold splits</span>
+    <span class="c1">#must do this because it has the shuffle feature like trian_test_split</span>
+    <span class="n">kf</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="c1">#Calculating RF classifier using cross validation</span>
+    <span class="n">cv</span> <span class="o">=</span> <span class="n">cross_validate</span><span class="p">(</span><span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">50</span><span class="p">),</span>
+                               <span class="n">df_X</span><span class="p">,</span> <span class="n">df_y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">kf</span><span class="p">)</span>
+    <span class="n">cv_acc</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">cv</span><span class="p">[</span><span class="s1">&#39;test_score&#39;</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;avg performance: </span><span class="si">{</span><span class="n">cv_acc</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">10</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1">#Confusion Matrix</span>
+<span class="c1">#For CV, to get the confusion matrix, cross_val_predict must be called</span>
+<span class="n">y_pred_cv</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">50</span><span class="p">),</span>
+                               <span class="n">df_X</span><span class="p">,</span> <span class="n">df_y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">kf</span><span class="p">)</span>
+<span class="n">cm_cv</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">df_y</span><span class="p">,</span> <span class="n">y_pred_cv</span><span class="p">)</span>
+<span class="n">ConfusionMatrixDisplay</span><span class="p">(</span><span class="n">confusion_matrix</span><span class="o">=</span><span class="n">cm_cv</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Purples&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Cross Validation RF Confusion Matrix&quot;</span><span class="p">)</span>
+
+<span class="c1">#save plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;cv_conf_matrx.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>avg performance: 0.9364784527518172
+</pre></div>
+</div>
+<img alt="_images/92c3bac8e99e25b8db17ace60ae2e5605ee2e81c887bb20d54af1620cd195c39.png" src="_images/92c3bac8e99e25b8db17ace60ae2e5605ee2e81c887bb20d54af1620cd195c39.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="cross-validation-conclusion">
+<h2><span style="color:purple"> <em><strong>Cross Validation Conclusion</strong></em> </span><a class="headerlink" href="#cross-validation-conclusion" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Determining # folds</p>
+<ol class="arabic simple">
+<li><p>Accuracy did not vary much as the number of folds increased, so k=10 will be used as it is a common number of folds and happens to be approximately the best performing number of folds.</p></li>
+</ol>
+</li>
+<li><p>Calculating Average performance</p>
+<ol class="arabic simple">
+<li><p>The average performance of the RF model improved about 1 percent from the typical 80/20 split of training and test data</p></li>
+<li><p>There will likely be a greater improvement once the data is balanced</p></li>
+<li><p>The model is still gerenating more false-negatives than it is false-positives</p></li>
+</ol>
+</li>
+</ol>
+</section>
+<section id="balancing-data">
+<h2><span style="color:red"> <strong>Balancing Data</strong> </span><a class="headerlink" href="#balancing-data" title="Link to this heading">#</a></h2>
+<section id="a-oversampling">
+<h3><span style="color:red"> 1A. Oversampling </span><a class="headerlink" href="#a-oversampling" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>The oversampled csv file was created using the Jupyter Notebook “create_oversampled.ipynb”</p>
+<ul>
+<li><p>Total = 2,778, positive = 1,389, negative = 1,389</p></li>
+</ul>
+</li>
+<li><p>Once the data was balanced, the file was tested on the random forest model using a train/test split of 20% and using cross validation</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Oversampled data</span>
+<span class="n">df_data_over</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;alzheimers_disease_data_oversampled.csv&quot;</span><span class="p">)</span>
+
+<span class="c1">#remove PatiendID and DoctorInCharge cols so they don&#39;t get used in RF</span>
+<span class="n">df_data_over</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;PatientID&quot;</span><span class="p">,</span><span class="s2">&quot;DoctorInCharge&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1">#separate test and training data</span>
+<span class="n">df_X_over</span> <span class="o">=</span> <span class="n">df_data_over</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;Diagnosis&quot;</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df_y_over</span> <span class="o">=</span> <span class="n">df_data_over</span><span class="p">[</span><span class="s2">&quot;Diagnosis&quot;</span><span class="p">]</span>
+
+<span class="c1">#create training and test subsets</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">df_X_over</span><span class="p">,</span> <span class="n">df_y_over</span><span class="p">,</span> 
+                                                    <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="c1">#accumulative accuracy</span>
+<span class="n">over_acc</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">):</span>
+    <span class="c1">#Calculating RF classifier</span>
+    <span class="n">rf_over</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+    <span class="n">rf_over</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+    <span class="n">over_acc</span> <span class="o">+=</span> <span class="n">rf_over</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Oversampled RF Accuracy: </span><span class="si">{</span><span class="n">over_acc</span><span class="o">/</span><span class="mi">10</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1">#confusion matrix</span>
+<span class="n">y_pred_over</span> <span class="o">=</span> <span class="n">rf_over</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">cm_over</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_over</span><span class="p">)</span>
+<span class="n">ConfusionMatrixDisplay</span><span class="p">(</span><span class="n">confusion_matrix</span><span class="o">=</span><span class="n">cm_over</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Oversampled RF Confusion Matrix&quot;</span><span class="p">)</span>
+
+<span class="c1">#save plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;oversampled_rf_cm.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+
+<span class="c1">#display plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Oversampled RF Accuracy: 0.9595323741007192
+</pre></div>
+</div>
+<img alt="_images/b5346fa6461b1deb8fd92288ed4cd36c615c555f0f96f9787e1dcd80681227c4.png" src="_images/b5346fa6461b1deb8fd92288ed4cd36c615c555f0f96f9787e1dcd80681227c4.png" />
+</div>
+</div>
+</section>
+<section id="b-oversampling-cv">
+<h3><span style="color:red"> 1B. Oversampling + CV </span><a class="headerlink" href="#b-oversampling-cv" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Oversampled data</span>
+<span class="n">df_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;alzheimers_disease_data_oversampled.csv&quot;</span><span class="p">)</span>
+
+<span class="c1">#remove PatiendID and DoctorInCharge cols so they don&#39;t get used in RF</span>
+<span class="n">df_data</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;PatientID&quot;</span><span class="p">,</span><span class="s2">&quot;DoctorInCharge&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1">#separate data in X and y variables</span>
+<span class="n">df_X</span> <span class="o">=</span> <span class="n">df_data</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;Diagnosis&quot;</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df_y</span> <span class="o">=</span> <span class="n">df_data</span><span class="p">[</span><span class="s2">&quot;Diagnosis&quot;</span><span class="p">]</span>
+
+<span class="c1">#accumulative accuracy</span>
+<span class="n">cv_ovr_acc</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">):</span>
+    <span class="c1">#creating k-fold splits</span>
+    <span class="c1">#must do this because it has the shuffle feature like trian_test_split</span>
+    <span class="n">kf</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="c1">#Calculating RF classifier using cross validation</span>
+    <span class="n">cv</span> <span class="o">=</span> <span class="n">cross_validate</span><span class="p">(</span><span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">50</span><span class="p">),</span>
+                               <span class="n">df_X</span><span class="p">,</span> <span class="n">df_y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">kf</span><span class="p">)</span>
+    <span class="n">cv_ovr_acc</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">cv</span><span class="p">[</span><span class="s1">&#39;test_score&#39;</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;avg performance: </span><span class="si">{</span><span class="n">cv_ovr_acc</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">10</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1">#Confusion Matrix</span>
+<span class="c1">#For CV, to get the confusion matrix, cross_val_predict must be called</span>
+<span class="n">y_pred_cv_ovr</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">50</span><span class="p">),</span>
+                               <span class="n">df_X</span><span class="p">,</span> <span class="n">df_y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">kf</span><span class="p">)</span>
+<span class="n">cm_cv_ovr</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">df_y</span><span class="p">,</span> <span class="n">y_pred_cv_ovr</span><span class="p">)</span>
+<span class="n">ConfusionMatrixDisplay</span><span class="p">(</span><span class="n">confusion_matrix</span><span class="o">=</span><span class="n">cm_cv_ovr</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;CV + Oversampled RF Confusion Matrix&quot;</span><span class="p">)</span>
+
+<span class="c1">#save plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;cv_ovr_cm.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>avg performance: 0.9654777916796998
+</pre></div>
+</div>
+<img alt="_images/94d781944dfc1bc8a8dcf0d834c1abb3f1845aeb2197a95a647ede5858b2ea23.png" src="_images/94d781944dfc1bc8a8dcf0d834c1abb3f1845aeb2197a95a647ede5858b2ea23.png" />
+</div>
+</div>
+</section>
+<section id="a-bagging">
+<h3><span style="color:red"> 2A. Bagging </span><a class="headerlink" href="#a-bagging" title="Link to this heading">#</a></h3>
+<section id="determining-bags">
+<h4><span style="color:red"> Determining # Bags</span><a class="headerlink" href="#determining-bags" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#import data</span>
+<span class="n">df_data_bag</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;alzheimers_disease_data.csv&quot;</span><span class="p">)</span>
+
+<span class="c1">#remove PatientID and DoctorInCharge cols so they don&#39;t get used in RF</span>
+<span class="n">df_data_bag</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;PatientID&quot;</span><span class="p">,</span><span class="s2">&quot;DoctorInCharge&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1">#separate X and y variables</span>
+<span class="n">df_X_bag</span> <span class="o">=</span> <span class="n">df_data_bag</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;Diagnosis&quot;</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df_y_bag</span> <span class="o">=</span> <span class="n">df_data_bag</span><span class="p">[</span><span class="s2">&quot;Diagnosis&quot;</span><span class="p">]</span>
+
+<span class="c1">#create training and test subsets</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">df_X_bag</span><span class="p">,</span> <span class="n">df_y_bag</span><span class="p">,</span> 
+                                                  <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+
+<span class="n">bag_estimators</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">110</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">bag_results</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">bag_acc</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="c1">#Calculating the bagged RF classifier</span>
+<span class="k">for</span> <span class="n">bag</span> <span class="ow">in</span> <span class="n">bag_estimators</span><span class="p">:</span>
+    <span class="n">rf_bag</span> <span class="o">=</span> <span class="n">BaggingClassifier</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">50</span><span class="p">),</span>
+                               <span class="n">n_estimators</span><span class="o">=</span><span class="n">bag</span><span class="p">)</span>
+    <span class="n">rf_bag</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+    <span class="n">score_bag</span> <span class="o">=</span> <span class="n">rf_bag</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+    <span class="n">bag_results</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">bag</span><span class="p">,</span><span class="n">score_bag</span><span class="p">))</span>
+    <span class="n">bag_acc</span> <span class="o">+=</span> <span class="n">score_bag</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Bagged RF Accuracy: </span><span class="si">{</span><span class="n">bag_acc</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">bag_estimators</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">bag_results</span>
+
+<span class="c1"># Plot of cv accuracy based on changes in fold count</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="c1">#get only % accurate values from tuples</span>
+<span class="n">accuracy</span> <span class="o">=</span> <span class="p">[</span><span class="n">val</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">bag_results</span><span class="p">]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">bag_estimators</span><span class="p">,</span> <span class="n">accuracy</span><span class="p">)</span>
+
+<span class="c1"># labels for graph</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;RF Performance Based on # Bags&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;# Bags&quot;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;% Accuracy&quot;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mf">.90</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span> <span class="o">=</span> <span class="mi">16</span><span class="p">)</span>
+
+<span class="c1">#save plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;bagging_rf_accuracy.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+
+<span class="c1">#display plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Bagged RF Accuracy: 0.9362790697674418
+</pre></div>
+</div>
+<img alt="_images/847ddd103465f0d8642560588998e873938a52d7126355b5bf425c458a16865f.png" src="_images/847ddd103465f0d8642560588998e873938a52d7126355b5bf425c458a16865f.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="id1">
+<h3><span style="color:red"> 2A. Bagging </span><a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<section id="calculating-average-bagging-score">
+<h4><span style="color:red"> Calculating Average Bagging Score</span><a class="headerlink" href="#calculating-average-bagging-score" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#import data</span>
+<span class="n">df_data_bag</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;alzheimers_disease_data.csv&quot;</span><span class="p">)</span>
+
+<span class="c1">#remove PatientID and DoctorInCharge cols so they don&#39;t get used in RF</span>
+<span class="n">df_data_bag</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;PatientID&quot;</span><span class="p">,</span><span class="s2">&quot;DoctorInCharge&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1">#separate X and y variables</span>
+<span class="n">df_X_bag</span> <span class="o">=</span> <span class="n">df_data_bag</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;Diagnosis&quot;</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df_y_bag</span> <span class="o">=</span> <span class="n">df_data_bag</span><span class="p">[</span><span class="s2">&quot;Diagnosis&quot;</span><span class="p">]</span>
+
+<span class="c1">#create training and test subsets</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">df_X_bag</span><span class="p">,</span> <span class="n">df_y_bag</span><span class="p">,</span> 
+                                                  <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+
+<span class="c1">#accumulated accuracy</span>
+<span class="n">bag_acc</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="c1">#Calculating the bagged RF classifier</span>
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">):</span>
+    <span class="n">rf_bag</span> <span class="o">=</span> <span class="n">BaggingClassifier</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">50</span><span class="p">),</span>
+                               <span class="n">n_estimators</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">rf_bag</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+    <span class="n">score_bag</span> <span class="o">=</span> <span class="n">rf_bag</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+    <span class="n">bag_acc</span> <span class="o">+=</span> <span class="n">score_bag</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Bagged RF Accuracy: </span><span class="si">{</span><span class="n">bag_acc</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">10</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1">#confusion matrix</span>
+<span class="n">y_pred_bag</span> <span class="o">=</span> <span class="n">rf_bag</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">cm_bag</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_bag</span><span class="p">)</span>
+<span class="n">ConfusionMatrixDisplay</span><span class="p">(</span><span class="n">confusion_matrix</span><span class="o">=</span><span class="n">cm_bag</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Bagged RF Confusion Matrix&quot;</span><span class="p">)</span>
+
+<span class="c1">#save plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;bagged_rf_cm.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+
+<span class="c1">#display plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Bagged RF Accuracy: 0.9116279069767442
+</pre></div>
+</div>
+<img alt="_images/1dabb1567528fe72359f53847ba2bad88406933c896b2962dc51e80cbd55528a.png" src="_images/1dabb1567528fe72359f53847ba2bad88406933c896b2962dc51e80cbd55528a.png" />
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="balancing-data-conclusion">
+<h2><span style="color:red"> <em><strong>Balancing Data Conclusion</strong></em> </span><a class="headerlink" href="#balancing-data-conclusion" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Oversampling has the highest performance, giving a significant boost of about 4%</p>
+<ol class="arabic simple">
+<li><p>The oversampled data also fixed the model’s overprediction of negative results</p></li>
+<li><p>Oversampling with cross validation performed about the same as just oversampling with RF</p></li>
+</ol>
+</li>
+<li><p>Bagging produced the worst performance so far, performing about as poorly, if not more poorly, than simply using the 80/20 split on RF</p>
+<ol class="arabic simple">
+<li><p>Bagging also did not correct false negatives</p>
+<ul class="simple">
+<li><p>I think this is the case because selecting a random subset of data that is so heavily skewed toward negative examples is likely to produced subsets that are also skewed toward negative examples.</p></li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+</section>
+<section id="feature-selection">
+<h2><strong>Feature Selection</strong><a class="headerlink" href="#feature-selection" title="Link to this heading">#</a></h2>
+<p>The Random Forest Classifier randomly chooses features, but it is possible removing irrelevant features could improve the efficiency of the model without sacrificing accuracy.</p>
+<section id="option-1-remove-only-the-most-irrelevant-features">
+<h3>Option 1: Remove only the most irrelevant features<a class="headerlink" href="#option-1-remove-only-the-most-irrelevant-features" title="Link to this heading">#</a></h3>
+<p>Based on the information gained during feature selection, any feature with less than 0.01 correlation will be removed.</p>
+<p>Removed Features:</p>
+<ul class="simple">
+<li><p>DifficultyCompletingTasks</p></li>
+<li><p>DietQuality</p></li>
+<li><p>CholesterolTotal</p></li>
+<li><p>PhysicalActivity</p></li>
+<li><p>DiastolicBP</p></li>
+<li><p>Foregetfulness</p></li>
+<li><p>Smoking</p></li>
+<li><p>Age</p></li>
+<li><p>Depression</p></li>
+<li><p>AlcoholConsumption</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Oversampled data</span>
+<span class="n">df_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;alzheimers_disease_data_oversampled.csv&quot;</span><span class="p">)</span>
+
+<span class="c1">#remove PatiendID and DoctorInCharge cols so they don&#39;t get used in RF</span>
+<span class="n">df_data</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;PatientID&quot;</span><span class="p">,</span><span class="s2">&quot;DoctorInCharge&quot;</span><span class="p">,</span><span class="s2">&quot;DifficultyCompletingTasks&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;DietQuality&quot;</span><span class="p">,</span><span class="s2">&quot;CholesterolTotal&quot;</span><span class="p">,</span><span class="s2">&quot;PhysicalActivity&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;DiastolicBP&quot;</span><span class="p">,</span><span class="s2">&quot;Forgetfulness&quot;</span><span class="p">,</span><span class="s2">&quot;Smoking&quot;</span><span class="p">,</span><span class="s2">&quot;Age&quot;</span><span class="p">,</span><span class="s2">&quot;Depression&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;AlcoholConsumption&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1">#separate data in X and y variables</span>
+<span class="n">df_X</span> <span class="o">=</span> <span class="n">df_data</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;Diagnosis&quot;</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df_y</span> <span class="o">=</span> <span class="n">df_data</span><span class="p">[</span><span class="s2">&quot;Diagnosis&quot;</span><span class="p">]</span>
+
+<span class="c1">#accumulative accuracy</span>
+<span class="n">cv_ovr_acc</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">):</span>
+    <span class="c1">#creating k-fold splits</span>
+    <span class="c1">#must do this because it has the shuffle feature like trian_test_split</span>
+    <span class="n">kf</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="c1">#Calculating RF classifier using cross validation</span>
+    <span class="n">cv</span> <span class="o">=</span> <span class="n">cross_validate</span><span class="p">(</span><span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">50</span><span class="p">),</span>
+                               <span class="n">df_X</span><span class="p">,</span> <span class="n">df_y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">kf</span><span class="p">)</span>
+    <span class="n">cv_ovr_acc</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">cv</span><span class="p">[</span><span class="s1">&#39;test_score&#39;</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;avg performance: </span><span class="si">{</span><span class="n">cv_ovr_acc</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">10</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1">#Confusion Matrix</span>
+<span class="c1">#For CV, to get the confusion matrix, cross_val_predict must be called</span>
+<span class="n">y_pred_cv_ovr</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">50</span><span class="p">),</span>
+                               <span class="n">df_X</span><span class="p">,</span> <span class="n">df_y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">kf</span><span class="p">)</span>
+<span class="n">cm_cv_ovr</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">df_y</span><span class="p">,</span> <span class="n">y_pred_cv_ovr</span><span class="p">)</span>
+<span class="n">ConfusionMatrixDisplay</span><span class="p">(</span><span class="n">confusion_matrix</span><span class="o">=</span><span class="n">cm_cv_ovr</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray_r&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;CV + Ovr + Feat RF Confusion Matrix&quot;</span><span class="p">)</span>
+
+<span class="c1">#save plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;cv_ovr_feat_cm.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>avg performance: 0.9662013867167136
+</pre></div>
+</div>
+<img alt="_images/5324466ed4226fb111d3762de7f2085a14dd55b61e1fa1daa98a9ab6d971e9d5.png" src="_images/5324466ed4226fb111d3762de7f2085a14dd55b61e1fa1daa98a9ab6d971e9d5.png" />
+</div>
+</div>
+</section>
+<section id="option-2-keep-only-the-most-relevant-features">
+<h3>Option 2: Keep only the most relevant features<a class="headerlink" href="#option-2-keep-only-the-most-relevant-features" title="Link to this heading">#</a></h3>
+<p>Remaining Features:</p>
+<ul class="simple">
+<li><p>FunctionalAssessment</p></li>
+<li><p>ADL</p></li>
+<li><p>MMSE</p></li>
+<li><p>BehavioralProblems</p></li>
+<li><p>MemoryCompaints</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Oversampled data</span>
+<span class="n">df_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;alzheimers_disease_cleaned_oversampled.csv&quot;</span><span class="p">)</span>
+
+<span class="c1">#separate data in X and y variables</span>
+<span class="n">df_X</span> <span class="o">=</span> <span class="n">df_data</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;Diagnosis&quot;</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df_y</span> <span class="o">=</span> <span class="n">df_data</span><span class="p">[</span><span class="s2">&quot;Diagnosis&quot;</span><span class="p">]</span>
+
+<span class="c1">#accumulative accuracy</span>
+<span class="n">cv_ovr_acc</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">):</span>
+    <span class="c1">#creating k-fold splits</span>
+    <span class="c1">#must do this because it has the shuffle feature like trian_test_split</span>
+    <span class="n">kf</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="c1">#Calculating RF classifier using cross validation</span>
+    <span class="n">cv</span> <span class="o">=</span> <span class="n">cross_validate</span><span class="p">(</span><span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">50</span><span class="p">),</span>
+                               <span class="n">df_X</span><span class="p">,</span> <span class="n">df_y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">kf</span><span class="p">)</span>
+    <span class="n">cv_ovr_acc</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">cv</span><span class="p">[</span><span class="s1">&#39;test_score&#39;</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;avg performance: </span><span class="si">{</span><span class="n">cv_ovr_acc</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">10</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1">#Confusion Matrix</span>
+<span class="c1">#For CV, to get the confusion matrix, cross_val_predict must be called</span>
+<span class="n">y_pred_cv_ovr</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">50</span><span class="p">),</span>
+                               <span class="n">df_X</span><span class="p">,</span> <span class="n">df_y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">kf</span><span class="p">)</span>
+<span class="n">cm_cv_ovr</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">df_y</span><span class="p">,</span> <span class="n">y_pred_cv_ovr</span><span class="p">)</span>
+<span class="n">ConfusionMatrixDisplay</span><span class="p">(</span><span class="n">confusion_matrix</span><span class="o">=</span><span class="n">cm_cv_ovr</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray_r&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;CV + Ovr + Clean RF Confusion Matrix&quot;</span><span class="p">)</span>
+
+<span class="c1">#save plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;cv_ovr_clean_cm.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>avg performance: 0.9651902825565635
+</pre></div>
+</div>
+<img alt="_images/1cbf0ecd6c4e0ba3d67efd5087d1643556356386c9c16358fbd9952309ef9147.png" src="_images/1cbf0ecd6c4e0ba3d67efd5087d1643556356386c9c16358fbd9952309ef9147.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="feature-selection-conclusion">
+<h2><em><strong>Feature Selection Conclusion</strong></em><a class="headerlink" href="#feature-selection-conclusion" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Removing the 11 irrelevant features did not have a significant impact on the overall performance of the model.</p></li>
+<li><p>Using only the 5 most relevant features resulted in the approximately the same performance as when all or some of the features were used.</p></li>
+<li><p>The model using the “cleaned” and oversampled dataset using CV will be used for the stacking model because it had the best performance while using the least amount of resources.</p></li>
+</ol>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -396,16 +1145,16 @@ document.write(`
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "python"
+            mode: "conda-base-py"
         },
         kernelOptions: {
-            name: "python3",
+            name: "conda-base-py",
             path: "./."
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'python3'</script>
+    <script>kernelName = 'conda-base-py'</script>
 
                 </article>
               
@@ -418,20 +1167,20 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="exploratory_data_analysis.html"
+       href="Decision%20Tree.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Exploratory Data Analysis</p>
+        <p class="prev-next-title">Bagging Decision Tree Model</p>
       </div>
     </a>
     <a class="right-next"
-       href="AdaBoosting.html"
+       href="stacking.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Ada Boosting</p>
+        <p class="prev-next-title">Stacking Models</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -441,6 +1190,50 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#random-forest-considerations">Random Forest Considerations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-testing"><span style="color:green"> <strong>Initial Testing</strong> </span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-conclusion"><span style="color:green"> <em><strong>Initial Conclusion</strong></em> </span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#determining-n-trees-for-random-forest-classifier"><span style="color:blue"> <strong>Determining N Trees for Random Forest Classifier</strong> </span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cross-validation"><span style="color:purple"> <strong>Cross Validation</strong> </span></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#determining-folds"><span style="color:purple"> 1. Determining # Folds</span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calculating-average-cv-score"><span style="color:purple"> 2. Calculating Average CV Score</span></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cross-validation-conclusion"><span style="color:purple"> <em><strong>Cross Validation Conclusion</strong></em> </span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#balancing-data"><span style="color:red"> <strong>Balancing Data</strong> </span></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-oversampling"><span style="color:red"> 1A. Oversampling </span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#b-oversampling-cv"><span style="color:red"> 1B. Oversampling + CV </span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-bagging"><span style="color:red"> 2A. Bagging </span></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#determining-bags"><span style="color:red"> Determining # Bags</span></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><span style="color:red"> 2A. Bagging </span></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#calculating-average-bagging-score"><span style="color:red"> Calculating Average Bagging Score</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#balancing-data-conclusion"><span style="color:red"> <em><strong>Balancing Data Conclusion</strong></em> </span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#feature-selection"><strong>Feature Selection</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#option-1-remove-only-the-most-irrelevant-features">Option 1: Remove only the most irrelevant features</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#option-2-keep-only-the-most-relevant-features">Option 2: Keep only the most relevant features</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#feature-selection-conclusion"><em><strong>Feature Selection Conclusion</strong></em></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

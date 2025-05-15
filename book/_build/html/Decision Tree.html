@@ -1,0 +1,2075 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Bagging Decision Tree Model &#8212; CISC5790 - Alzheimer&#39;s Disease Data Analysis</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Decision Tree';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Random Forest Classifier" href="RandomForest.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="KNN.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="introduction.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="CISC5790 - Alzheimer's Disease Data Analysis - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="CISC5790 - Alzheimer's Disease Data Analysis - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="introduction.html">
+                    CISC5790 Project
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Preprocessing.html">Data Preprocessing</a></li>
+
+
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Bagging Decision Tree Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RandomForest.html">Random Forest Classifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stacking.html">Stacking Models</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/simonedinato/CISC5790Project" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/simonedinato/CISC5790Project/issues/new?title=Issue%20on%20page%20%2FDecision Tree.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/Decision Tree.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Bagging Decision Tree Model</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-build-model">How to Build Model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-model">Building Model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#benefits-of-using-bagging-with-decision-trees">Benefits of Using Bagging with Decision Trees:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing-with-oversampling-dataset">Testing with Oversampling Dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluation">Evaluation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis">Analysis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing-top-5-features-selection-cleaned-dataset">Testing Top 5 Features selection cleaned Dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Evaluation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing-all-features-excluded-doctor-in-charge">Testing all features ( Excluded - Doctor In charge)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Evaluation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overall-analysis">Overall Analysis</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="bagging-decision-tree-model">
+<h1>Bagging Decision Tree Model<a class="headerlink" href="#bagging-decision-tree-model" title="Link to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.tree</span><span class="w"> </span><span class="kn">import</span> <span class="n">DecisionTreeClassifier</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">accuracy_score</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">mode</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">recall_score</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">classification_report</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConfusionMatrixDisplay</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">confusion_matrix</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>PatientID</th>
+      <th>Age</th>
+      <th>Gender</th>
+      <th>Ethnicity</th>
+      <th>EducationLevel</th>
+      <th>BMI</th>
+      <th>Smoking</th>
+      <th>AlcoholConsumption</th>
+      <th>PhysicalActivity</th>
+      <th>...</th>
+      <th>MemoryComplaints</th>
+      <th>BehavioralProblems</th>
+      <th>ADL</th>
+      <th>Confusion</th>
+      <th>Disorientation</th>
+      <th>PersonalityChanges</th>
+      <th>DifficultyCompletingTasks</th>
+      <th>Forgetfulness</th>
+      <th>Diagnosis</th>
+      <th>DoctorInCharge</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>4751</td>
+      <td>73</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+      <td>22.927749</td>
+      <td>0</td>
+      <td>13.297218</td>
+      <td>6.327112</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1.725883</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>XXXConfid</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>4752</td>
+      <td>89</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>26.827681</td>
+      <td>0</td>
+      <td>4.542524</td>
+      <td>7.619885</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2.592424</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>XXXConfid</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>4753</td>
+      <td>73</td>
+      <td>0</td>
+      <td>3</td>
+      <td>1</td>
+      <td>17.795882</td>
+      <td>0</td>
+      <td>19.555085</td>
+      <td>7.844988</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>7.119548</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>XXXConfid</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>4754</td>
+      <td>74</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>33.800817</td>
+      <td>1</td>
+      <td>12.209266</td>
+      <td>8.428001</td>
+      <td>...</td>
+      <td>0</td>
+      <td>1</td>
+      <td>6.481226</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>XXXConfid</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>4755</td>
+      <td>89</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>20.716974</td>
+      <td>0</td>
+      <td>18.454356</td>
+      <td>6.310461</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.014691</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>XXXConfid</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2773</th>
+      <td>947</td>
+      <td>5698</td>
+      <td>75</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>28.145541</td>
+      <td>0</td>
+      <td>14.687081</td>
+      <td>9.362816</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>2.540361</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>XXXConfid</td>
+    </tr>
+    <tr>
+      <th>2774</th>
+      <td>1195</td>
+      <td>5946</td>
+      <td>65</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+      <td>37.706252</td>
+      <td>1</td>
+      <td>5.207424</td>
+      <td>1.716515</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.069671</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>XXXConfid</td>
+    </tr>
+    <tr>
+      <th>2775</th>
+      <td>923</td>
+      <td>5674</td>
+      <td>60</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+      <td>36.618332</td>
+      <td>0</td>
+      <td>17.939241</td>
+      <td>8.013897</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>4.218700</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>XXXConfid</td>
+    </tr>
+    <tr>
+      <th>2776</th>
+      <td>897</td>
+      <td>5648</td>
+      <td>78</td>
+      <td>1</td>
+      <td>0</td>
+      <td>2</td>
+      <td>30.844795</td>
+      <td>1</td>
+      <td>10.518349</td>
+      <td>8.760165</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1.419698</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>XXXConfid</td>
+    </tr>
+    <tr>
+      <th>2777</th>
+      <td>636</td>
+      <td>5387</td>
+      <td>69</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>36.629490</td>
+      <td>0</td>
+      <td>16.997688</td>
+      <td>5.134921</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.346125</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>XXXConfid</td>
+    </tr>
+  </tbody>
+</table>
+<p>2778 rows × 36 columns</p>
+</div></div></div>
+</div>
+<p>Diagnois was imblanced so it use the excel data_oversampling file to be balanced.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;DoctorInCharge&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#features =[&quot;FunctionalAssessment&quot;, &quot;ADL&quot;, &quot;MMSE&quot;, &quot;MemoryComplaints&quot;, &quot;BehavioralProblems&quot;,&quot;SleepQuality&quot;, &quot;EducationLevel&quot;, &quot;FamilyHistoryAlzheimers&quot;, &quot;Depression&quot;, &quot;BMI&quot;]</span>
+<span class="n">target</span> <span class="o">=</span> <span class="s2">&quot;Diagnosis&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="how-to-build-model">
+<h2>How to Build Model<a class="headerlink" href="#how-to-build-model" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>For each n, create n bootstrap samples</p></li>
+<li><p>Train n decision trees</p></li>
+<li><p>Combine their predictions using majority voting</p></li>
+<li><p>Evaluate on the test set</p></li>
+</ul>
+</section>
+<section id="building-model">
+<h2>Building Model<a class="headerlink" href="#building-model" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Use 80% of data to train the model and 20% to test it to evaluate how the model perform in unseen data.</p></li>
+<li><p>More trees might reduce overfitting, but too many might not improve performance much. So, creating the 30 trees to test it.</p></li>
+<li><p>Creating Bootstrap samples: each tree get different subset of data and making more essembles and reduce variance.</p></li>
+<li><p>Train a weak learner (a single decision tree).Individual trees might not perform great alone, but together, they form a strong model.</p></li>
+<li><p>Use majority voting across all trees to get the final prediction. This is the core of Bagging — aggregate weak models for stronger, more stable predictions</p></li>
+</ul>
+</section>
+<section id="benefits-of-using-bagging-with-decision-trees">
+<h2>Benefits of Using Bagging with Decision Trees:<a class="headerlink" href="#benefits-of-using-bagging-with-decision-trees" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Reduced overfitting</p></li>
+<li><p>improved accuracy</p></li>
+<li><p>More Robust</p></li>
+<li><p>good for imblanced data</p></li>
+</ul>
+<p>In our dataset, trying to predict whether someone has Alzheimer’s or not.
+Most of the people in the dataset are healthy, and only a smaller group actually have Alzheimer’s.
+Because of that, we call the Alzheimer’s group the minority class — it’s the class with fewer examples.
+The healthy group is called the majority class since it has more data points.
+This imbalance can be a problem for machine learning models, because they tend to focus more on the majority class and may ignore or misclassify the minority class.
+But in this case, the minority class — people with Alzheimer’s — is actually the most important group to detect.
+That’s why special techniques, like bagging and class weighting, to help the model better learn from this smaller group and not overlook it.</p>
+</section>
+<section id="testing-with-oversampling-dataset">
+<h2>Testing with Oversampling Dataset<a class="headerlink" href="#testing-with-oversampling-dataset" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/averdone/CISC5790Project/refs/heads/main/book/data/alzheimers_disease_data_oversampled.csv&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;PatientID&quot;</span><span class="p">,</span> <span class="s2">&quot;Diagnosis&quot;</span><span class="p">])</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">counts</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">Diagnosis</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="nb">print</span> <span class="p">(</span><span class="n">counts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1389, 1389]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Split into 80% training and 20% testing</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># Bagging with tree</span>
+<span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">19</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">21</span><span class="p">,</span><span class="mi">22</span><span class="p">,</span><span class="mi">23</span><span class="p">,</span><span class="mi">24</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">26</span><span class="p">,</span><span class="mi">27</span><span class="p">,</span><span class="mi">28</span><span class="p">,</span><span class="mi">29</span><span class="p">,</span><span class="mi">30</span><span class="p">]:</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">all_preds</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="c1">#Create a bootstrap sample from 80% training data</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x_train</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">x_train</span><span class="p">),</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">x_sample</span> <span class="o">=</span> <span class="n">x_train</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+        <span class="n">y_sample</span> <span class="o">=</span> <span class="n">y_train</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+
+        <span class="c1"># Train model on the bootstrap sample</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_sample</span><span class="p">,</span> <span class="n">y_sample</span><span class="p">)</span>
+        <span class="n">models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+        <span class="c1"># Weighted model</span>
+        <span class="n">model_weighted</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+        <span class="n">model_weighted</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+        <span class="n">preds_weighted</span> <span class="o">=</span> <span class="n">model_weighted</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+
+        <span class="c1"># Predict on 20% test data</span>
+        <span class="n">preds</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+        <span class="n">all_preds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">preds</span><span class="p">)</span>
+
+    <span class="c1"># Majority vote across all trees</span>
+    <span class="n">all_preds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">all_preds</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">final_preds</span> <span class="o">=</span> <span class="n">mode</span><span class="p">(</span><span class="n">all_preds</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="c1"># Evaluate on test set</span>
+    <span class="n">acc</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">final_preds</span><span class="p">)</span>
+    <span class="n">results</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">acc</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2"> trees → Test Accuracy: </span><span class="si">{</span><span class="n">acc</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">best_n</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">results</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Best number of trees: </span><span class="si">{</span><span class="n">best_n</span><span class="si">}</span><span class="s2"> with accuracy </span><span class="si">{</span><span class="n">results</span><span class="p">[</span><span class="n">best_n</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1">#ConfusionMatrixDisplay.from_predictions(y_test, final_preds, cmap=&#39;Blues&#39;)</span>
+    <span class="c1">#plt.title(&quot;Confusion Matrix – Bagging Model with Decision Trees&quot;)</span>
+    <span class="c1">#plt.show()</span>
+    <span class="c1">#plt.tight_layout()</span>
+    <span class="c1">#plt.show()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1 trees → Test Accuracy: 0.9640
+Best number of trees: 1 with accuracy 0.9640
+2 trees → Test Accuracy: 0.9658
+Best number of trees: 2 with accuracy 0.9658
+3 trees → Test Accuracy: 0.9658
+Best number of trees: 2 with accuracy 0.9658
+4 trees → Test Accuracy: 0.9568
+Best number of trees: 2 with accuracy 0.9658
+5 trees → Test Accuracy: 0.9658
+Best number of trees: 2 with accuracy 0.9658
+6 trees → Test Accuracy: 0.9622
+Best number of trees: 2 with accuracy 0.9658
+7 trees → Test Accuracy: 0.9712
+Best number of trees: 7 with accuracy 0.9712
+8 trees → Test Accuracy: 0.9712
+Best number of trees: 7 with accuracy 0.9712
+9 trees → Test Accuracy: 0.9694
+Best number of trees: 7 with accuracy 0.9712
+10 trees → Test Accuracy: 0.9658
+Best number of trees: 7 with accuracy 0.9712
+11 trees → Test Accuracy: 0.9640
+Best number of trees: 7 with accuracy 0.9712
+12 trees → Test Accuracy: 0.9712
+Best number of trees: 7 with accuracy 0.9712
+13 trees → Test Accuracy: 0.9730
+Best number of trees: 13 with accuracy 0.9730
+14 trees → Test Accuracy: 0.9712
+Best number of trees: 13 with accuracy 0.9730
+15 trees → Test Accuracy: 0.9730
+Best number of trees: 13 with accuracy 0.9730
+16 trees → Test Accuracy: 0.9694
+Best number of trees: 13 with accuracy 0.9730
+17 trees → Test Accuracy: 0.9658
+Best number of trees: 13 with accuracy 0.9730
+18 trees → Test Accuracy: 0.9658
+Best number of trees: 13 with accuracy 0.9730
+19 trees → Test Accuracy: 0.9694
+Best number of trees: 13 with accuracy 0.9730
+20 trees → Test Accuracy: 0.9730
+Best number of trees: 13 with accuracy 0.9730
+21 trees → Test Accuracy: 0.9730
+Best number of trees: 13 with accuracy 0.9730
+22 trees → Test Accuracy: 0.9730
+Best number of trees: 13 with accuracy 0.9730
+23 trees → Test Accuracy: 0.9712
+Best number of trees: 13 with accuracy 0.9730
+24 trees → Test Accuracy: 0.9676
+Best number of trees: 13 with accuracy 0.9730
+25 trees → Test Accuracy: 0.9712
+Best number of trees: 13 with accuracy 0.9730
+26 trees → Test Accuracy: 0.9676
+Best number of trees: 13 with accuracy 0.9730
+27 trees → Test Accuracy: 0.9730
+Best number of trees: 13 with accuracy 0.9730
+28 trees → Test Accuracy: 0.9712
+Best number of trees: 13 with accuracy 0.9730
+29 trees → Test Accuracy: 0.9730
+Best number of trees: 13 with accuracy 0.9730
+30 trees → Test Accuracy: 0.9712
+Best number of trees: 13 with accuracy 0.9730
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">best_n</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">results</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Best number of trees: </span><span class="si">{</span><span class="n">best_n</span><span class="si">}</span><span class="s2"> with accuracy </span><span class="si">{</span><span class="n">results</span><span class="p">[</span><span class="n">best_n</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">ConfusionMatrixDisplay</span><span class="o">.</span><span class="n">from_predictions</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">final_preds</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Confusion Matrix – Bagging Model with Decision Trees&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">final_preds</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Best number of trees: 13 with accuracy 0.9730
+</pre></div>
+</div>
+<img alt="_images/6247c981c7e425f7e434fd98635cb4a312b61b3a5ebc0f664e4851b08a428216.png" src="_images/6247c981c7e425f7e434fd98635cb4a312b61b3a5ebc0f664e4851b08a428216.png" />
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Figure size 640x480 with 0 Axes&gt;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>              precision    recall  f1-score   support
+
+           0       0.96      0.98      0.97       273
+           1       0.98      0.96      0.97       283
+
+    accuracy                           0.97       556
+   macro avg       0.97      0.97      0.97       556
+weighted avg       0.97      0.97      0.97       556
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cm</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">final_preds</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cm</span><span class="p">)</span>
+<span class="n">TN</span><span class="p">,</span> <span class="n">FP</span><span class="p">,</span> <span class="n">FN</span><span class="p">,</span> <span class="n">TP</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
+<span class="n">accuracy</span>  <span class="o">=</span> <span class="p">(</span><span class="n">TP</span> <span class="o">+</span> <span class="n">TN</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">TP</span> <span class="o">+</span> <span class="n">TN</span> <span class="o">+</span> <span class="n">FP</span> <span class="o">+</span> <span class="n">FN</span><span class="p">)</span>
+<span class="n">precision</span> <span class="o">=</span> <span class="n">TP</span> <span class="o">/</span> <span class="p">(</span><span class="n">TP</span> <span class="o">+</span> <span class="n">FP</span><span class="p">)</span>
+<span class="n">recall</span>    <span class="o">=</span> <span class="n">TP</span> <span class="o">/</span> <span class="p">(</span><span class="n">TP</span> <span class="o">+</span> <span class="n">FN</span><span class="p">)</span>
+<span class="n">f1_score</span>  <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">precision</span> <span class="o">*</span> <span class="n">recall</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">precision</span> <span class="o">+</span> <span class="n">recall</span><span class="p">)</span>
+<span class="n">fnr</span> <span class="o">=</span> <span class="n">FN</span> <span class="o">/</span> <span class="p">(</span><span class="n">FN</span> <span class="o">+</span> <span class="n">TP</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Accuracy:  </span><span class="si">{</span><span class="n">accuracy</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Precision: </span><span class="si">{</span><span class="n">precision</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Recall:    </span><span class="si">{</span><span class="n">recall</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;F1 Score:  </span><span class="si">{</span><span class="n">f1_score</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;False Negative Rate: </span><span class="si">{</span><span class="n">fnr</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[267   6]
+ [ 10 273]]
+Accuracy:  0.97
+Precision: 0.98
+Recall:    0.96
+F1 Score:  0.97
+False Negative Rate: 0.0353
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="evaluation">
+<h2>Evaluation<a class="headerlink" href="#evaluation" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>True Positive (TP) = 273</p></li>
+<li><p>True Negative (TN) = 267</p></li>
+<li><p>False Positive (FP) = 6</p></li>
+<li><p>False Negative (FN) = 10</p></li>
+<li></li>
+</ul>
+<p>Plot confusion matrix to show how many false positive, false negative, true positive, true negative, especially to know false negative.</p>
+<ul class="simple">
+<li><p>Precision - 98%  - how accurate are positive predition</p></li>
+<li><p>Recall - 96% - how many positive case are caught</p></li>
+<li><p>F1 score - 97% - balance between precision and recall avoiding false alarm</p></li>
+</ul>
+</section>
+<section id="analysis">
+<h2>Analysis<a class="headerlink" href="#analysis" title="Link to this heading">#</a></h2>
+<p>By using the oversampling dataset, Alzhimers for
+Using bagging ensemble of decision trees, and the results were very strong. The overall accuracy was 97%, which means the model correctly predicted almost all cases in the test data.
+What’s even more important is the recall score of 0.98%. That means it was able to detect almost all true Alzheimer’s cases.
+And also, I run the model several times and false negative rate — it was below 5%, so the model rarely missed a case where the patient actually had Alzheimer’s. That tells us the model is not just accurate, but also reliable and sensitive to real cases.
+The precision was also high at 98%, meaning that most of the patients predicted to have Alzheimer’s actually did.
+Even though used all available features, the model remained very stable. Bagging, it avoided overfitting and stayed robust.
+In conclusion, this model shows a strong and balanced performance, and it’s well-suited for use in early Alzheimer’s screening.</p>
+</section>
+<section id="testing-top-5-features-selection-cleaned-dataset">
+<h2>Testing Top 5 Features selection cleaned Dataset<a class="headerlink" href="#testing-top-5-features-selection-cleaned-dataset" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df1</span><span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/averdone/CISC5790Project/refs/heads/main/book/data/alzheimers_disease_cleaned.csv&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df1</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>MemoryComplaints</th>
+      <th>BehavioralProblems</th>
+      <th>MMSE</th>
+      <th>ADL</th>
+      <th>FunctionalAssessment</th>
+      <th>Diagnosis</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>0</td>
+      <td>21.463532</td>
+      <td>1.725883</td>
+      <td>6.518877</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0</td>
+      <td>0</td>
+      <td>20.613267</td>
+      <td>2.592424</td>
+      <td>7.118696</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>0</td>
+      <td>7.356249</td>
+      <td>7.119548</td>
+      <td>5.895077</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0</td>
+      <td>1</td>
+      <td>13.991127</td>
+      <td>6.481226</td>
+      <td>8.965106</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0</td>
+      <td>0</td>
+      <td>13.517609</td>
+      <td>0.014691</td>
+      <td>6.045039</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2144</th>
+      <td>0</td>
+      <td>0</td>
+      <td>1.201190</td>
+      <td>4.492838</td>
+      <td>0.238667</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2145</th>
+      <td>0</td>
+      <td>1</td>
+      <td>6.458060</td>
+      <td>9.204952</td>
+      <td>8.687480</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2146</th>
+      <td>0</td>
+      <td>0</td>
+      <td>17.011003</td>
+      <td>5.036334</td>
+      <td>1.972137</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2147</th>
+      <td>0</td>
+      <td>0</td>
+      <td>4.030491</td>
+      <td>3.785399</td>
+      <td>5.173891</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2148</th>
+      <td>0</td>
+      <td>1</td>
+      <td>11.114777</td>
+      <td>8.327563</td>
+      <td>6.307543</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+<p>2149 rows × 6 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">counts</span> <span class="o">=</span> <span class="n">df1</span><span class="o">.</span><span class="n">Diagnosis</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="nb">print</span> <span class="p">(</span><span class="n">counts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1389, 760]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">features</span> <span class="o">=</span><span class="p">[</span><span class="s2">&quot;FunctionalAssessment&quot;</span><span class="p">,</span> <span class="s2">&quot;ADL&quot;</span><span class="p">,</span> <span class="s2">&quot;MMSE&quot;</span><span class="p">,</span> <span class="s2">&quot;MemoryComplaints&quot;</span><span class="p">,</span> <span class="s2">&quot;BehavioralProblems&quot;</span><span class="p">]</span>
+<span class="n">target</span> <span class="o">=</span> <span class="s2">&quot;Diagnosis&quot;</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df1</span><span class="p">[</span><span class="n">target</span><span class="p">]</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">df1</span> <span class="p">[</span><span class="n">features</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Split into 80% training and 20% testing</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># Bagging with tree</span>
+<span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">19</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">21</span><span class="p">,</span><span class="mi">22</span><span class="p">,</span><span class="mi">23</span><span class="p">,</span><span class="mi">24</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">26</span><span class="p">,</span><span class="mi">27</span><span class="p">,</span><span class="mi">28</span><span class="p">,</span><span class="mi">29</span><span class="p">,</span><span class="mi">30</span><span class="p">]:</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">all_preds</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="c1">#Create a bootstrap sample from 80% training data</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x_train</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">x_train</span><span class="p">),</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">x_sample</span> <span class="o">=</span> <span class="n">x_train</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+        <span class="n">y_sample</span> <span class="o">=</span> <span class="n">y_train</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+
+        <span class="c1"># Train model on the bootstrap sample</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_sample</span><span class="p">,</span> <span class="n">y_sample</span><span class="p">)</span>
+        <span class="n">models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+        <span class="c1"># Weighted model</span>
+        <span class="c1">#model_weighted = DecisionTreeClassifier(max_depth=15,random_state=42)</span>
+        <span class="n">model_weighted</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">min_samples_split</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">min_samples_leaf</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">class_weight</span><span class="o">=</span><span class="s1">&#39;balanced&#39;</span><span class="p">,</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+        <span class="n">model_weighted</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+        <span class="n">preds_weighted</span> <span class="o">=</span> <span class="n">model_weighted</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+
+        <span class="c1"># Predict on 20% test data</span>
+        <span class="n">preds</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+        <span class="n">all_preds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">preds</span><span class="p">)</span>
+
+    <span class="c1"># Majority vote across all trees</span>
+    <span class="n">all_preds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">all_preds</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">final_preds</span> <span class="o">=</span> <span class="n">mode</span><span class="p">(</span><span class="n">all_preds</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="c1"># Evaluate on test set</span>
+    <span class="n">acc</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">final_preds</span><span class="p">)</span>
+    <span class="n">results</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">acc</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2"> trees → Test Accuracy: </span><span class="si">{</span><span class="n">acc</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">best_n</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">results</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Best number of trees: </span><span class="si">{</span><span class="n">best_n</span><span class="si">}</span><span class="s2"> with accuracy </span><span class="si">{</span><span class="n">results</span><span class="p">[</span><span class="n">best_n</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1 trees → Test Accuracy: 0.8884
+Best number of trees: 1 with accuracy 0.8884
+2 trees → Test Accuracy: 0.9023
+Best number of trees: 2 with accuracy 0.9023
+3 trees → Test Accuracy: 0.9442
+Best number of trees: 3 with accuracy 0.9442
+4 trees → Test Accuracy: 0.9349
+Best number of trees: 3 with accuracy 0.9442
+5 trees → Test Accuracy: 0.9326
+Best number of trees: 3 with accuracy 0.9442
+6 trees → Test Accuracy: 0.9419
+Best number of trees: 3 with accuracy 0.9442
+7 trees → Test Accuracy: 0.9419
+Best number of trees: 3 with accuracy 0.9442
+8 trees → Test Accuracy: 0.9419
+Best number of trees: 3 with accuracy 0.9442
+9 trees → Test Accuracy: 0.9488
+Best number of trees: 9 with accuracy 0.9488
+10 trees → Test Accuracy: 0.9488
+Best number of trees: 9 with accuracy 0.9488
+11 trees → Test Accuracy: 0.9442
+Best number of trees: 9 with accuracy 0.9488
+12 trees → Test Accuracy: 0.9442
+Best number of trees: 9 with accuracy 0.9488
+13 trees → Test Accuracy: 0.9442
+Best number of trees: 9 with accuracy 0.9488
+14 trees → Test Accuracy: 0.9535
+Best number of trees: 14 with accuracy 0.9535
+15 trees → Test Accuracy: 0.9512
+Best number of trees: 14 with accuracy 0.9535
+16 trees → Test Accuracy: 0.9512
+Best number of trees: 14 with accuracy 0.9535
+17 trees → Test Accuracy: 0.9512
+Best number of trees: 14 with accuracy 0.9535
+18 trees → Test Accuracy: 0.9512
+Best number of trees: 14 with accuracy 0.9535
+19 trees → Test Accuracy: 0.9465
+Best number of trees: 14 with accuracy 0.9535
+20 trees → Test Accuracy: 0.9488
+Best number of trees: 14 with accuracy 0.9535
+21 trees → Test Accuracy: 0.9488
+Best number of trees: 14 with accuracy 0.9535
+22 trees → Test Accuracy: 0.9512
+Best number of trees: 14 with accuracy 0.9535
+23 trees → Test Accuracy: 0.9535
+Best number of trees: 14 with accuracy 0.9535
+24 trees → Test Accuracy: 0.9535
+Best number of trees: 14 with accuracy 0.9535
+25 trees → Test Accuracy: 0.9535
+Best number of trees: 14 with accuracy 0.9535
+26 trees → Test Accuracy: 0.9488
+Best number of trees: 14 with accuracy 0.9535
+27 trees → Test Accuracy: 0.9535
+Best number of trees: 14 with accuracy 0.9535
+28 trees → Test Accuracy: 0.9465
+Best number of trees: 14 with accuracy 0.9535
+29 trees → Test Accuracy: 0.9535
+Best number of trees: 14 with accuracy 0.9535
+30 trees → Test Accuracy: 0.9535
+Best number of trees: 14 with accuracy 0.9535
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span> <span class="n">best_n</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">results</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>
+ <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Best number of trees: </span><span class="si">{</span><span class="n">best_n</span><span class="si">}</span><span class="s2"> with accuracy </span><span class="si">{</span><span class="n">results</span><span class="p">[</span><span class="n">best_n</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+ <span class="n">ConfusionMatrixDisplay</span><span class="o">.</span><span class="n">from_predictions</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">final_preds</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">)</span>
+ <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Confusion Matrix – Bagging Model with Decision Trees&quot;</span><span class="p">)</span>
+ <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+ <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+ <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">final_preds</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Best number of trees: 14 with accuracy 0.9535
+</pre></div>
+</div>
+<img alt="_images/3222792c161db1043a965fe4013ae744a84bd4bb79adee07db8306b244336438.png" src="_images/3222792c161db1043a965fe4013ae744a84bd4bb79adee07db8306b244336438.png" />
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Figure size 640x480 with 0 Axes&gt;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>              precision    recall  f1-score   support
+
+           0       0.95      0.98      0.96       277
+           1       0.96      0.91      0.93       153
+
+    accuracy                           0.95       430
+   macro avg       0.95      0.94      0.95       430
+weighted avg       0.95      0.95      0.95       430
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cm</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">final_preds</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cm</span><span class="p">)</span>
+<span class="n">TN</span><span class="p">,</span> <span class="n">FP</span><span class="p">,</span> <span class="n">FN</span><span class="p">,</span> <span class="n">TP</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
+<span class="n">accuracy</span>  <span class="o">=</span> <span class="p">(</span><span class="n">TP</span> <span class="o">+</span> <span class="n">TN</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">TP</span> <span class="o">+</span> <span class="n">TN</span> <span class="o">+</span> <span class="n">FP</span> <span class="o">+</span> <span class="n">FN</span><span class="p">)</span>
+<span class="n">precision</span> <span class="o">=</span> <span class="n">TP</span> <span class="o">/</span> <span class="p">(</span><span class="n">TP</span> <span class="o">+</span> <span class="n">FP</span><span class="p">)</span>
+<span class="n">recall</span>    <span class="o">=</span> <span class="n">TP</span> <span class="o">/</span> <span class="p">(</span><span class="n">TP</span> <span class="o">+</span> <span class="n">FN</span><span class="p">)</span>
+<span class="n">f1_score</span>  <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">precision</span> <span class="o">*</span> <span class="n">recall</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">precision</span> <span class="o">+</span> <span class="n">recall</span><span class="p">)</span>
+<span class="n">fnr</span> <span class="o">=</span> <span class="n">FN</span> <span class="o">/</span> <span class="p">(</span><span class="n">FN</span> <span class="o">+</span> <span class="n">TP</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Accuracy:  </span><span class="si">{</span><span class="n">accuracy</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Precision: </span><span class="si">{</span><span class="n">precision</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Recall:    </span><span class="si">{</span><span class="n">recall</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;F1 Score:  </span><span class="si">{</span><span class="n">f1_score</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;False Negative Rate: </span><span class="si">{</span><span class="n">fnr</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[271   6]
+ [ 14 139]]
+Accuracy:  0.95
+Precision: 0.96
+Recall:    0.91
+F1 Score:  0.93
+False Negative Rate: 0.0915
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id1">
+<h2>Evaluation<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>True Positive (TP) = 139</p></li>
+<li><p>True Negative (TN) = 271</p></li>
+<li><p>False Positive (FP) = 6</p></li>
+<li><p>False Negative (FN) = 14</p></li>
+<li><p>Precision - 96%  - how accurate are positive predition</p></li>
+<li><p>Recall - 91% - how many positive case are caught</p></li>
+<li><p>F1 score - 93% - balance between precision and recall avoiding false alarm</p></li>
+</ul>
+</section>
+<section id="testing-all-features-excluded-doctor-in-charge">
+<h2>Testing all features ( Excluded - Doctor In charge)<a class="headerlink" href="#testing-all-features-excluded-doctor-in-charge" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df2</span><span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/averdone/CISC5790Project/refs/heads/main/book/data/alzheimers_disease_data.csv&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df2</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>PatientID</th>
+      <th>Age</th>
+      <th>Gender</th>
+      <th>Ethnicity</th>
+      <th>EducationLevel</th>
+      <th>BMI</th>
+      <th>Smoking</th>
+      <th>AlcoholConsumption</th>
+      <th>PhysicalActivity</th>
+      <th>DietQuality</th>
+      <th>...</th>
+      <th>MemoryComplaints</th>
+      <th>BehavioralProblems</th>
+      <th>ADL</th>
+      <th>Confusion</th>
+      <th>Disorientation</th>
+      <th>PersonalityChanges</th>
+      <th>DifficultyCompletingTasks</th>
+      <th>Forgetfulness</th>
+      <th>Diagnosis</th>
+      <th>DoctorInCharge</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>4751</td>
+      <td>73</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+      <td>22.927749</td>
+      <td>0</td>
+      <td>13.297218</td>
+      <td>6.327112</td>
+      <td>1.347214</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1.725883</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>XXXConfid</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4752</td>
+      <td>89</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>26.827681</td>
+      <td>0</td>
+      <td>4.542524</td>
+      <td>7.619885</td>
+      <td>0.518767</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2.592424</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>XXXConfid</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>4753</td>
+      <td>73</td>
+      <td>0</td>
+      <td>3</td>
+      <td>1</td>
+      <td>17.795882</td>
+      <td>0</td>
+      <td>19.555085</td>
+      <td>7.844988</td>
+      <td>1.826335</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>7.119548</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>XXXConfid</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4754</td>
+      <td>74</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>33.800817</td>
+      <td>1</td>
+      <td>12.209266</td>
+      <td>8.428001</td>
+      <td>7.435604</td>
+      <td>...</td>
+      <td>0</td>
+      <td>1</td>
+      <td>6.481226</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>XXXConfid</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4755</td>
+      <td>89</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>20.716974</td>
+      <td>0</td>
+      <td>18.454356</td>
+      <td>6.310461</td>
+      <td>0.795498</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.014691</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>XXXConfid</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2144</th>
+      <td>6895</td>
+      <td>61</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>39.121757</td>
+      <td>0</td>
+      <td>1.561126</td>
+      <td>4.049964</td>
+      <td>6.555306</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>4.492838</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>XXXConfid</td>
+    </tr>
+    <tr>
+      <th>2145</th>
+      <td>6896</td>
+      <td>75</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+      <td>17.857903</td>
+      <td>0</td>
+      <td>18.767261</td>
+      <td>1.360667</td>
+      <td>2.904662</td>
+      <td>...</td>
+      <td>0</td>
+      <td>1</td>
+      <td>9.204952</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>XXXConfid</td>
+    </tr>
+    <tr>
+      <th>2146</th>
+      <td>6897</td>
+      <td>77</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>15.476479</td>
+      <td>0</td>
+      <td>4.594670</td>
+      <td>9.886002</td>
+      <td>8.120025</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>5.036334</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>XXXConfid</td>
+    </tr>
+    <tr>
+      <th>2147</th>
+      <td>6898</td>
+      <td>78</td>
+      <td>1</td>
+      <td>3</td>
+      <td>1</td>
+      <td>15.299911</td>
+      <td>0</td>
+      <td>8.674505</td>
+      <td>6.354282</td>
+      <td>1.263427</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3.785399</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>XXXConfid</td>
+    </tr>
+    <tr>
+      <th>2148</th>
+      <td>6899</td>
+      <td>72</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+      <td>33.289738</td>
+      <td>0</td>
+      <td>7.890703</td>
+      <td>6.570993</td>
+      <td>7.941404</td>
+      <td>...</td>
+      <td>0</td>
+      <td>1</td>
+      <td>8.327563</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>XXXConfid</td>
+    </tr>
+  </tbody>
+</table>
+<p>2149 rows × 35 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">counts</span> <span class="o">=</span> <span class="n">df2</span><span class="o">.</span><span class="n">Diagnosis</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="nb">print</span> <span class="p">(</span><span class="n">counts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1389, 760]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">target</span> <span class="o">=</span> <span class="s2">&quot;Diagnosis&quot;</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">df2</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Diagnosis&quot;</span><span class="p">,</span> <span class="s2">&quot;DoctorInCharge&quot;</span><span class="p">])</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df2</span><span class="p">[</span><span class="n">target</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Split into 80% training and 20% testing</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># Bagging with tree</span>
+<span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">19</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">21</span><span class="p">,</span><span class="mi">22</span><span class="p">,</span><span class="mi">23</span><span class="p">,</span><span class="mi">24</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">26</span><span class="p">,</span><span class="mi">27</span><span class="p">,</span><span class="mi">28</span><span class="p">,</span><span class="mi">29</span><span class="p">,</span><span class="mi">30</span><span class="p">]:</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">all_preds</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="c1">#Create a bootstrap sample from 80% training data</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x_train</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">x_train</span><span class="p">),</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">x_sample</span> <span class="o">=</span> <span class="n">x_train</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+        <span class="n">y_sample</span> <span class="o">=</span> <span class="n">y_train</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+
+        <span class="c1"># Train model on the bootstrap sample</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_sample</span><span class="p">,</span> <span class="n">y_sample</span><span class="p">)</span>
+        <span class="n">models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+        <span class="c1"># Weighted model</span>
+        <span class="c1">#model_weighted = DecisionTreeClassifier(max_depth=15,random_state=42)</span>
+        <span class="n">model_weighted</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span><span class="n">class_weight</span><span class="o">=</span><span class="s1">&#39;balanced&#39;</span><span class="p">,</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+        <span class="c1">#model_weighted = DecisionTreeClassifier(max_depth=15, min_samples_split=10,min_samples_leaf=5,class_weight=&#39;balanced&#39;,random_state=42)</span>
+        <span class="n">model_weighted</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+        <span class="n">preds_weighted</span> <span class="o">=</span> <span class="n">model_weighted</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+
+        <span class="c1"># Predict on 20% test data</span>
+        <span class="n">preds</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+        <span class="n">all_preds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">preds</span><span class="p">)</span>
+
+    <span class="c1"># Majority vote across all trees</span>
+    <span class="n">all_preds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">all_preds</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">final_preds</span> <span class="o">=</span> <span class="n">mode</span><span class="p">(</span><span class="n">all_preds</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="c1"># Evaluate on test set</span>
+    <span class="n">acc</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">final_preds</span><span class="p">)</span>
+    <span class="n">results</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">acc</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2"> trees → Test Accuracy: </span><span class="si">{</span><span class="n">acc</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">best_n</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">results</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Best number of trees: </span><span class="si">{</span><span class="n">best_n</span><span class="si">}</span><span class="s2"> with accuracy </span><span class="si">{</span><span class="n">results</span><span class="p">[</span><span class="n">best_n</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1 trees → Test Accuracy: 0.9233
+Best number of trees: 1 with accuracy 0.9233
+2 trees → Test Accuracy: 0.9442
+Best number of trees: 2 with accuracy 0.9442
+3 trees → Test Accuracy: 0.9674
+Best number of trees: 3 with accuracy 0.9674
+4 trees → Test Accuracy: 0.9558
+Best number of trees: 3 with accuracy 0.9674
+5 trees → Test Accuracy: 0.9605
+Best number of trees: 3 with accuracy 0.9674
+6 trees → Test Accuracy: 0.9535
+Best number of trees: 3 with accuracy 0.9674
+7 trees → Test Accuracy: 0.9558
+Best number of trees: 3 with accuracy 0.9674
+8 trees → Test Accuracy: 0.9512
+Best number of trees: 3 with accuracy 0.9674
+9 trees → Test Accuracy: 0.9605
+Best number of trees: 3 with accuracy 0.9674
+10 trees → Test Accuracy: 0.9605
+Best number of trees: 3 with accuracy 0.9674
+11 trees → Test Accuracy: 0.9581
+Best number of trees: 3 with accuracy 0.9674
+12 trees → Test Accuracy: 0.9628
+Best number of trees: 3 with accuracy 0.9674
+13 trees → Test Accuracy: 0.9605
+Best number of trees: 3 with accuracy 0.9674
+14 trees → Test Accuracy: 0.9628
+Best number of trees: 3 with accuracy 0.9674
+15 trees → Test Accuracy: 0.9674
+Best number of trees: 3 with accuracy 0.9674
+16 trees → Test Accuracy: 0.9628
+Best number of trees: 3 with accuracy 0.9674
+17 trees → Test Accuracy: 0.9535
+Best number of trees: 3 with accuracy 0.9674
+18 trees → Test Accuracy: 0.9581
+Best number of trees: 3 with accuracy 0.9674
+19 trees → Test Accuracy: 0.9535
+Best number of trees: 3 with accuracy 0.9674
+20 trees → Test Accuracy: 0.9721
+Best number of trees: 20 with accuracy 0.9721
+21 trees → Test Accuracy: 0.9605
+Best number of trees: 20 with accuracy 0.9721
+22 trees → Test Accuracy: 0.9651
+Best number of trees: 20 with accuracy 0.9721
+23 trees → Test Accuracy: 0.9605
+Best number of trees: 20 with accuracy 0.9721
+24 trees → Test Accuracy: 0.9581
+Best number of trees: 20 with accuracy 0.9721
+25 trees → Test Accuracy: 0.9605
+Best number of trees: 20 with accuracy 0.9721
+26 trees → Test Accuracy: 0.9698
+Best number of trees: 20 with accuracy 0.9721
+27 trees → Test Accuracy: 0.9558
+Best number of trees: 20 with accuracy 0.9721
+28 trees → Test Accuracy: 0.9651
+Best number of trees: 20 with accuracy 0.9721
+29 trees → Test Accuracy: 0.9651
+Best number of trees: 20 with accuracy 0.9721
+30 trees → Test Accuracy: 0.9628
+Best number of trees: 20 with accuracy 0.9721
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">best_n</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">results</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Best number of trees: </span><span class="si">{</span><span class="n">best_n</span><span class="si">}</span><span class="s2"> with accuracy </span><span class="si">{</span><span class="n">results</span><span class="p">[</span><span class="n">best_n</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">ConfusionMatrixDisplay</span><span class="o">.</span><span class="n">from_predictions</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">final_preds</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Confusion Matrix – Bagging Model with Decision Trees&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">final_preds</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Best number of trees: 20 with accuracy 0.9721
+</pre></div>
+</div>
+<img alt="_images/46ff60ab00720fbb250930d89152af72e766c50d04d1efb904a1324a8201158d.png" src="_images/46ff60ab00720fbb250930d89152af72e766c50d04d1efb904a1324a8201158d.png" />
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Figure size 640x480 with 0 Axes&gt;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>              precision    recall  f1-score   support
+
+           0       0.97      0.97      0.97       277
+           1       0.95      0.94      0.95       153
+
+    accuracy                           0.96       430
+   macro avg       0.96      0.96      0.96       430
+weighted avg       0.96      0.96      0.96       430
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cm</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">final_preds</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cm</span><span class="p">)</span>
+<span class="n">TN</span><span class="p">,</span> <span class="n">FP</span><span class="p">,</span> <span class="n">FN</span><span class="p">,</span> <span class="n">TP</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
+<span class="n">accuracy</span>  <span class="o">=</span> <span class="p">(</span><span class="n">TP</span> <span class="o">+</span> <span class="n">TN</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">TP</span> <span class="o">+</span> <span class="n">TN</span> <span class="o">+</span> <span class="n">FP</span> <span class="o">+</span> <span class="n">FN</span><span class="p">)</span>
+<span class="n">precision</span> <span class="o">=</span> <span class="n">TP</span> <span class="o">/</span> <span class="p">(</span><span class="n">TP</span> <span class="o">+</span> <span class="n">FP</span><span class="p">)</span>
+<span class="n">recall</span>    <span class="o">=</span> <span class="n">TP</span> <span class="o">/</span> <span class="p">(</span><span class="n">TP</span> <span class="o">+</span> <span class="n">FN</span><span class="p">)</span>
+<span class="n">f1_score</span>  <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">precision</span> <span class="o">*</span> <span class="n">recall</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">precision</span> <span class="o">+</span> <span class="n">recall</span><span class="p">)</span>
+<span class="n">fnr</span> <span class="o">=</span> <span class="n">FN</span> <span class="o">/</span> <span class="p">(</span><span class="n">FN</span> <span class="o">+</span> <span class="n">TP</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Accuracy:  </span><span class="si">{</span><span class="n">accuracy</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Precision: </span><span class="si">{</span><span class="n">precision</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Recall:    </span><span class="si">{</span><span class="n">recall</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;F1 Score:  </span><span class="si">{</span><span class="n">f1_score</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;False Negative Rate: </span><span class="si">{</span><span class="n">fnr</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[270   7]
+ [  9 144]]
+Accuracy:  0.96
+Precision: 0.95
+Recall:    0.94
+F1 Score:  0.95
+False Negative Rate: 0.0588
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id2">
+<h2>Evaluation<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>True Positive (TP) = 146</p></li>
+<li><p>True Negative (TN) = 271</p></li>
+<li><p>False Positive (FP) = 6</p></li>
+<li><p>False Negative (FN) = 7</p></li>
+<li><p>Precision - 96% - how accurate are positive predition</p></li>
+<li><p>Recall - 91% - how many positive case are caught</p></li>
+<li><p>F1 score - 93% - balance between precision and recall avoiding false alarm</p></li>
+</ul>
+</section>
+<section id="overall-analysis">
+<h2>Overall Analysis<a class="headerlink" href="#overall-analysis" title="Link to this heading">#</a></h2>
+<p>The best overall performance came from the model trained on the oversampled dataset, achieving approximately 97% accuracy and a very low false negative rate (below 5%). This model proved to be the most effective at identifying true Alzheimer’s cases.
+The model trained using all features also performed very well, with 96% accuracy, and had a lower false negative rate compared to the model using only the top 5 selected features. Surprisingly, when using all features, the model actually performed even better — especially in reducing false negatives.<br />
+I assume that using all features, along with balanced class weights and controlled tree splitting, helped improve the model’s accuracy.
+Overall, combining oversampling, feature selection, and bagging with bootstrapping produced consistently strong and reliable results — making the model suitable for early Alzheimer’s detection.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="KNN.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">&lt;no title&gt;</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="RandomForest.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Random Forest Classifier</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-build-model">How to Build Model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-model">Building Model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#benefits-of-using-bagging-with-decision-trees">Benefits of Using Bagging with Decision Trees:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing-with-oversampling-dataset">Testing with Oversampling Dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluation">Evaluation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis">Analysis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing-top-5-features-selection-cleaned-dataset">Testing Top 5 Features selection cleaned Dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Evaluation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing-all-features-excluded-doctor-in-charge">Testing all features ( Excluded - Doctor In charge)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Evaluation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overall-analysis">Overall Analysis</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Team1
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1444 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Stacking Models &#8212; CISC5790 - Alzheimer&#39;s Disease Data Analysis</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'stacking';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Random Forest Classifier" href="RandomForest.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="introduction.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="CISC5790 - Alzheimer's Disease Data Analysis - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="CISC5790 - Alzheimer's Disease Data Analysis - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="introduction.html">
+                    CISC5790 Project
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Preprocessing.html">Data Preprocessing</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Decision%20Tree.html">Bagging Decision Tree Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RandomForest.html">Random Forest Classifier</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Stacking Models</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/simonedinato/CISC5790Project" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/simonedinato/CISC5790Project/issues/new?title=Issue%20on%20page%20%2Fstacking.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/stacking.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Stacking Models</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importing-modules">Importing modules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#retrieval">Retrieval</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#split">Split</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#models-selection">Models selection</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#knn">KNN</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#random-forest">Random Forest</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#decision-tree">Decision Tree</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stacking-model">Stacking Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#naive-bayes">Naive Bayes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#confusion-matrix">Confusion Matrix</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusion</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="stacking-models">
+<h1>Stacking Models<a class="headerlink" href="#stacking-models" title="Link to this heading">#</a></h1>
+<p>Stacking is an ensemble learning method that combines multiple classification models to enhance predictive performance. It operates in two stages:</p>
+<ol class="arabic simple">
+<li><p>Train several base models on the dataset.</p></li>
+<li><p>Use their predictions to train a meta-model, which learns to optimally integrate them.</p></li>
+</ol>
+<p>This notebook implements and compares different stacking configurations using K-Nearest Neighbors, Decision Tree, Random Forest and Logistic regression as base models. Their predictions are used to train two different meta-models: Gaussian Naive Bayes and Logistic Regression. The performance of each stacking approach is evaluated using accuracy and confusion matrices to identify the most effective method.</p>
+<section id="importing-modules">
+<h2>Importing modules<a class="headerlink" href="#importing-modules" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span><span class="p">,</span> <span class="n">StratifiedKFold</span><span class="p">,</span> <span class="n">cross_val_predict</span><span class="p">,</span> <span class="n">cross_val_score</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">MinMaxScaler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.neighbors</span><span class="w"> </span><span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestClassifier</span><span class="p">,</span> <span class="n">StackingClassifier</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.tree</span><span class="w"> </span><span class="kn">import</span> <span class="n">DecisionTreeClassifier</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.naive_bayes</span><span class="w"> </span><span class="kn">import</span> <span class="n">GaussianNB</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LinearRegression</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">confusion_matrix</span><span class="p">,</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">classification_report</span><span class="p">,</span> <span class="n">ConfusionMatrixDisplay</span><span class="p">,</span> <span class="n">roc_curve</span><span class="p">,</span> <span class="n">auc</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="retrieval">
+<h2>Retrieval<a class="headerlink" href="#retrieval" title="Link to this heading">#</a></h2>
+<p>The dataset is loaded from two sources:</p>
+<ul class="simple">
+<li><p>Cleaned Raw Data: The original training and testing sets after preprocessing.</p></li>
+<li><p>Cleaned Oversampled Data: A version of the dataset where oversampling techniques (e.g., SMOTE) have been applied to address class imbalance.</p></li>
+</ul>
+<p>Using both datasets allows us to compare how models perform on naturally imbalanced data versus balanced data. This helps evaluate model robustness and fairness in prediction accuracy across different class distributions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_raw</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data/alzheimers_disease_cleaned.csv&quot;</span><span class="p">)</span>
+<span class="n">df_oversampled</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data/alzheimers_disease_cleaned_oversampled.csv&quot;</span><span class="p">)</span>
+
+<span class="n">df_oversampled</span> <span class="o">=</span> <span class="n">df_oversampled</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Unnamed: 0&#39;</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">df_raw</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df_oversampled</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(2149, 6)
+(2778, 6)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_raw</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>MemoryComplaints</th>
+      <th>BehavioralProblems</th>
+      <th>MMSE</th>
+      <th>ADL</th>
+      <th>FunctionalAssessment</th>
+      <th>Diagnosis</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>0</td>
+      <td>21.463532</td>
+      <td>1.725883</td>
+      <td>6.518877</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0</td>
+      <td>0</td>
+      <td>20.613267</td>
+      <td>2.592424</td>
+      <td>7.118696</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>0</td>
+      <td>7.356249</td>
+      <td>7.119548</td>
+      <td>5.895077</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0</td>
+      <td>1</td>
+      <td>13.991127</td>
+      <td>6.481226</td>
+      <td>8.965106</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0</td>
+      <td>0</td>
+      <td>13.517609</td>
+      <td>0.014691</td>
+      <td>6.045039</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_oversampled</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>MMSE</th>
+      <th>FunctionalAssessment</th>
+      <th>MemoryComplaints</th>
+      <th>BehavioralProblems</th>
+      <th>ADL</th>
+      <th>Diagnosis</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>21.463532</td>
+      <td>6.518877</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1.725883</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>20.613267</td>
+      <td>7.118696</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2.592424</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>7.356249</td>
+      <td>5.895077</td>
+      <td>0</td>
+      <td>0</td>
+      <td>7.119548</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>13.991127</td>
+      <td>8.965106</td>
+      <td>0</td>
+      <td>1</td>
+      <td>6.481226</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>13.517609</td>
+      <td>6.045039</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.014691</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="split">
+<h2>Split<a class="headerlink" href="#split" title="Link to this heading">#</a></h2>
+<p>The dataset is divided into training and testing sets for both raw and oversampled versions. This separation ensures that model evaluation is performed on unseen data, allowing us to assess generalization performance. The same split is applied consistently across models to maintain comparability.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">split_data</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="n">df_processed</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="n">X</span> <span class="o">=</span> <span class="n">df_processed</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Diagnosis&#39;</span><span class="p">])</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">df_processed</span><span class="p">[</span><span class="s1">&#39;Diagnosis&#39;</span><span class="p">]</span>
+
+    <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+    <span class="n">scaler</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">()</span>
+    <span class="n">X_train_scaled</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+    <span class="n">X_test_scaled</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">X_train_scaled</span><span class="p">,</span> <span class="n">X_test_scaled</span><span class="p">,</span> <span class="n">scaler</span>
+
+<span class="n">X_train_raw</span><span class="p">,</span> <span class="n">X_test_raw</span><span class="p">,</span> <span class="n">y_train_raw</span><span class="p">,</span> <span class="n">y_test_raw</span><span class="p">,</span> <span class="n">X_train_scaled_raw</span><span class="p">,</span> <span class="n">X_test_scaled_raw</span><span class="p">,</span> <span class="n">scaler_raw</span> <span class="o">=</span> <span class="n">split_data</span><span class="p">(</span><span class="n">df_raw</span><span class="p">)</span>
+<span class="n">X_train_os</span><span class="p">,</span> <span class="n">X_test_os</span><span class="p">,</span> <span class="n">y_train_os</span><span class="p">,</span> <span class="n">y_test_os</span><span class="p">,</span> <span class="n">X_train_scaled_os</span><span class="p">,</span> <span class="n">X_test_scaled_os</span><span class="p">,</span> <span class="n">scaler_os</span> <span class="o">=</span> <span class="n">split_data</span><span class="p">(</span><span class="n">df_oversampled</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="models-selection">
+<h2>Models selection<a class="headerlink" href="#models-selection" title="Link to this heading">#</a></h2>
+<p>This function automates the training and evaluation process for KNN, Decision Tree, and Random Forest classifiers. It compares model performance on both raw and oversampled datasets using cross-validation or out-of-bag scores (for Random Forest). The model that achieves higher accuracy on the test set is selected for further use. This ensures optimal performance based on the nature of the dataset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">train_evaluate_select</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">model_instance_params</span><span class="p">,</span>
+                         <span class="n">X_train_scaled_raw</span><span class="p">,</span> <span class="n">y_train_raw</span><span class="p">,</span> <span class="n">X_test_scaled_raw</span><span class="p">,</span> <span class="n">y_test_raw</span><span class="p">,</span>
+                         <span class="n">X_train_scaled_os</span><span class="p">,</span> <span class="n">y_train_os</span><span class="p">,</span> <span class="n">X_test_scaled_os</span><span class="p">,</span> <span class="n">y_test_os</span><span class="p">):</span>
+    
+    <span class="n">cv</span> <span class="o">=</span> <span class="n">StratifiedKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">model_name</span> <span class="o">==</span> <span class="s1">&#39;KNN&#39;</span><span class="p">:</span>
+        <span class="n">model_raw_instance</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="o">**</span><span class="n">model_instance_params</span><span class="p">)</span>
+        <span class="n">model_os_instance</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="o">**</span><span class="n">model_instance_params</span><span class="p">)</span>
+
+        <span class="n">cv_scores_raw</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">model_raw_instance</span><span class="p">,</span> <span class="n">X_train_scaled_raw</span><span class="p">,</span> <span class="n">y_train_raw</span><span class="p">,</span> 
+                                        <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;accuracy&#39;</span><span class="p">)</span>
+        <span class="n">cv_mean_raw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">cv_scores_raw</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cross-Validation Accuracy (Raw Data): &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">cv_mean_raw</span><span class="p">,</span> <span class="mi">4</span><span class="p">)))</span>
+        
+        <span class="n">cv_scores_os</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">model_os_instance</span><span class="p">,</span> <span class="n">X_train_scaled_os</span><span class="p">,</span> <span class="n">y_train_os</span><span class="p">,</span> 
+                                       <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;accuracy&#39;</span><span class="p">)</span>
+        <span class="n">cv_mean_os</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">cv_scores_os</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cross-Validation Accuracy (Oversampled Data): &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">cv_mean_os</span><span class="p">,</span> <span class="mi">4</span><span class="p">)))</span>
+    
+        
+    <span class="k">elif</span> <span class="n">model_name</span> <span class="o">==</span> <span class="s1">&#39;Random Forest&#39;</span><span class="p">:</span>
+        <span class="n">model_raw_instance</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">oob_score</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">model_instance_params</span><span class="p">)</span>
+        <span class="n">model_os_instance</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">oob_score</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">model_instance_params</span><span class="p">)</span>
+
+        <span class="n">model_raw_instance</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_scaled_raw</span><span class="p">,</span> <span class="n">y_train_raw</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;OOB Accuracy (Raw Data): &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">model_raw_instance</span><span class="o">.</span><span class="n">oob_score_</span><span class="p">,</span> <span class="mi">4</span><span class="p">)))</span>
+        
+        <span class="n">model_os_instance</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_scaled_os</span><span class="p">,</span> <span class="n">y_train_os</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;OOB Accuracy (Oversampled Data): &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">model_os_instance</span><span class="o">.</span><span class="n">oob_score_</span><span class="p">,</span> <span class="mi">4</span><span class="p">)))</span>
+    
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">model_raw_instance</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="o">**</span><span class="n">model_instance_params</span><span class="p">)</span>
+        <span class="n">model_os_instance</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="o">**</span><span class="n">model_instance_params</span><span class="p">)</span>
+
+        <span class="n">cv_scores_raw</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">model_raw_instance</span><span class="p">,</span> <span class="n">X_train_scaled_raw</span><span class="p">,</span> <span class="n">y_train_raw</span><span class="p">,</span> 
+                                        <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;accuracy&#39;</span><span class="p">)</span>
+        <span class="n">cv_mean_raw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">cv_scores_raw</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cross-Validation Accuracy (Raw Data): &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">cv_mean_raw</span><span class="p">,</span> <span class="mi">4</span><span class="p">)))</span>
+        
+        <span class="n">cv_scores_os</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">model_os_instance</span><span class="p">,</span> <span class="n">X_train_scaled_os</span><span class="p">,</span> <span class="n">y_train_os</span><span class="p">,</span> 
+                                       <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;accuracy&#39;</span><span class="p">)</span>
+        <span class="n">cv_mean_os</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">cv_scores_os</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cross-Validation Accuracy (Oversampled Data): &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">cv_mean_os</span><span class="p">,</span> <span class="mi">4</span><span class="p">)))</span>
+    
+    <span class="n">model_raw_instance</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_scaled_raw</span><span class="p">,</span> <span class="n">y_train_raw</span><span class="p">)</span>
+    <span class="n">pred_raw</span> <span class="o">=</span> <span class="n">model_raw_instance</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_scaled_raw</span><span class="p">)</span>
+    <span class="n">acc_raw</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test_raw</span><span class="p">,</span> <span class="n">pred_raw</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Test Accuracy (Raw Data): &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">acc_raw</span><span class="p">,</span> <span class="mi">4</span><span class="p">)))</span>
+
+    <span class="n">model_os_instance</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_scaled_os</span><span class="p">,</span> <span class="n">y_train_os</span><span class="p">)</span>
+    <span class="n">pred_os</span> <span class="o">=</span> <span class="n">model_os_instance</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_scaled_os</span><span class="p">)</span>
+    <span class="n">acc_os</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span> <span class="n">pred_os</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Test Accuracy (Oversampled Data): &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">acc_os</span><span class="p">,</span> <span class="mi">4</span><span class="p">)))</span>
+
+    <span class="k">if</span> <span class="n">acc_os</span> <span class="o">&gt;=</span> <span class="n">acc_raw</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">model_os_instance</span><span class="p">,</span> <span class="n">pred_os</span><span class="p">,</span> <span class="n">acc_os</span><span class="p">,</span> <span class="n">X_test_scaled_os</span><span class="p">,</span> <span class="n">y_test_os</span><span class="p">,</span> <span class="s1">&#39;Oversampled&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">model_raw_instance</span><span class="p">,</span> <span class="n">pred_raw</span><span class="p">,</span> <span class="n">acc_raw</span><span class="p">,</span> <span class="n">X_test_scaled_raw</span><span class="p">,</span> <span class="n">y_test_raw</span><span class="p">,</span> <span class="s1">&#39;Raw&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="knn">
+<h2>KNN<a class="headerlink" href="#knn" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">knn_params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;n_neighbors&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}</span>
+<span class="n">knn_best</span><span class="p">,</span> <span class="n">knn_pred_best</span><span class="p">,</span> <span class="n">knn_acc_best</span><span class="p">,</span> <span class="n">X_test_scaled_knn</span><span class="p">,</span> <span class="n">y_test_knn</span><span class="p">,</span> <span class="n">knn_dataset_type</span> <span class="o">=</span> <span class="n">train_evaluate_select</span><span class="p">(</span>
+    <span class="s2">&quot;KNN&quot;</span><span class="p">,</span> <span class="n">knn_params</span><span class="p">,</span>
+    <span class="n">X_train_scaled_raw</span><span class="p">,</span> <span class="n">y_train_raw</span><span class="p">,</span> <span class="n">X_test_scaled_raw</span><span class="p">,</span> <span class="n">y_test_raw</span><span class="p">,</span>
+    <span class="n">X_train_scaled_os</span><span class="p">,</span> <span class="n">y_train_os</span><span class="p">,</span> <span class="n">X_test_scaled_os</span><span class="p">,</span> <span class="n">y_test_os</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Cross-Validation Accuracy (Raw Data): 0.9203
+Cross-Validation Accuracy (Oversampled Data): 0.928
+Test Accuracy (Raw Data): 0.9163
+Test Accuracy (Oversampled Data): 0.9299
+</pre></div>
+</div>
+</div>
+</div>
+<p>Based on the results, the oversampled dataset had a better performance in both cross-validation and test evaluation.</p>
+</section>
+<section id="random-forest">
+<h2>Random Forest<a class="headerlink" href="#random-forest" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rf_params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;n_estimators&#39;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="s1">&#39;random_state&#39;</span><span class="p">:</span> <span class="mi">42</span><span class="p">}</span>
+<span class="n">rf_best</span><span class="p">,</span> <span class="n">rf_pred_best</span><span class="p">,</span> <span class="n">rf_acc_best</span><span class="p">,</span> <span class="n">X_test_scaled_rf</span><span class="p">,</span> <span class="n">y_test_rf</span><span class="p">,</span> <span class="n">rf_dataset_type</span> <span class="o">=</span> <span class="n">train_evaluate_select</span><span class="p">(</span>
+    <span class="s1">&#39;Random Forest&#39;</span><span class="p">,</span> <span class="n">rf_params</span><span class="p">,</span>
+    <span class="n">X_train_scaled_raw</span><span class="p">,</span> <span class="n">y_train_raw</span><span class="p">,</span> <span class="n">X_test_scaled_raw</span><span class="p">,</span> <span class="n">y_test_raw</span><span class="p">,</span>
+    <span class="n">X_train_scaled_os</span><span class="p">,</span> <span class="n">y_train_os</span><span class="p">,</span> <span class="n">X_test_scaled_os</span><span class="p">,</span> <span class="n">y_test_os</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>OOB Accuracy (Raw Data): 0.9442
+OOB Accuracy (Oversampled Data): 0.9658
+Test Accuracy (Raw Data): 0.9488
+Test Accuracy (Oversampled Data): 0.9676
+</pre></div>
+</div>
+</div>
+</div>
+<p>The Random Forest model was trained and evaluated on both raw and oversampled datasets. One key feature of Random Forest is its use of Out-of-Bag (OOB) estimation, a built-in validation method. Since each tree in the forest is trained on a random bootstrap sample of the data, the unused samples (the “out-of-bag” instances) can be used to estimate performance without needing a separate validation set.</p>
+<p>The model trained on the oversampled data outperformed the raw version across both OOB and test evaluations.</p>
+</section>
+<section id="decision-tree">
+<h2>Decision Tree<a class="headerlink" href="#decision-tree" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dt_params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;random_state&#39;</span><span class="p">:</span> <span class="mi">42</span><span class="p">}</span>
+<span class="n">dt_best</span><span class="p">,</span> <span class="n">dt_pred_best</span><span class="p">,</span> <span class="n">dt_acc_best</span><span class="p">,</span> <span class="n">X_test_scaled_dt</span><span class="p">,</span> <span class="n">y_test_dt</span><span class="p">,</span> <span class="n">dt_dataset_type</span> <span class="o">=</span> <span class="n">train_evaluate_select</span><span class="p">(</span>
+    <span class="s1">&#39;Decision Tree&#39;</span><span class="p">,</span> <span class="n">dt_params</span><span class="p">,</span>
+    <span class="n">X_train_scaled_raw</span><span class="p">,</span> <span class="n">y_train_raw</span><span class="p">,</span> <span class="n">X_test_scaled_raw</span><span class="p">,</span> <span class="n">y_test_raw</span><span class="p">,</span>
+    <span class="n">X_train_scaled_os</span><span class="p">,</span> <span class="n">y_train_os</span><span class="p">,</span> <span class="n">X_test_scaled_os</span><span class="p">,</span> <span class="n">y_test_os</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Cross-Validation Accuracy (Raw Data): 0.9052
+Cross-Validation Accuracy (Oversampled Data): 0.9401
+Test Accuracy (Raw Data): 0.893
+Test Accuracy (Oversampled Data): 0.9478
+</pre></div>
+</div>
+</div>
+</div>
+<p>The model showed improved performance when trained on the oversampled data.</p>
+</section>
+<section id="stacking-model">
+<h2>Stacking Model<a class="headerlink" href="#stacking-model" title="Link to this heading">#</a></h2>
+<p>In this section, we create the “meta-features” for the stacking model. A stacking model combines predictions from several base models and uses them as features to train a final model, typically a simpler classifier. All of the models are trained on the oversampled dataset.</p>
+<ul class="simple">
+<li><p>We use cross-validation to generate predictions from the KNN and Decision Tree models. These predictions are stored as new features in the <code class="docutils literal notranslate"><span class="pre">meta_features_train</span></code> DataFrame. The predictions are generated using <code class="docutils literal notranslate"><span class="pre">cross_val_predict</span></code>, which returns the predicted labels for each data point based on the cross-validation procedure.</p></li>
+<li><p>Random Forest is trained on the oversampled training data. The model’s out-of-bag (OOB) predictions are used as another meta-feature. OOB predictions provide an estimate of model performance without the need for a separate validation set.</p></li>
+<li><p>After generating the predictions from KNN, Decision Tree, and Random Forest, these are combined into a single DataFrame: <code class="docutils literal notranslate"><span class="pre">meta_features_train</span></code>. Those will serve as the input features for the final meta-model.</p></li>
+<li><p>The target variable <code class="docutils literal notranslate"><span class="pre">y_train_os</span></code> is added as the actual labels in the DataFrame for training the final meta-model.</p></li>
+</ul>
+<section id="naive-bayes">
+<h3>Naive Bayes<a class="headerlink" href="#naive-bayes" title="Link to this heading">#</a></h3>
+<p>In this section, we train the final meta-model using the predictions from the base models. The meta-model is a Gaussian Naive Bayes (GNB) classifier, which is trained on the meta-features generated in the previous step.</p>
+<ul class="simple">
+<li><p>We use the meta-features from the base models <code class="docutils literal notranslate"><span class="pre">'knn_pred'</span></code>, <code class="docutils literal notranslate"><span class="pre">'rf_pred'</span></code> and <code class="docutils literal notranslate"><span class="pre">'dt_pred'</span></code> along with the actual target values <code class="docutils literal notranslate"><span class="pre">'target'</span></code> to train the Naive Bayes model. This model learns how to combine the predictions from the base models and make its own prediction based on them.</p></li>
+<li><p>For the test dataset, we generate predictions from the base models using the trained models <code class="docutils literal notranslate"><span class="pre">knn_best</span></code>, <code class="docutils literal notranslate"><span class="pre">dt_best</span></code>, <code class="docutils literal notranslate"><span class="pre">rf_best</span></code>, similar to how we did for the training data.</p></li>
+<li><p>The meta-features for the test data are passed into the trained Naive Bayes classifier <code class="docutils literal notranslate"><span class="pre">gnb</span></code> to generate the final predictions <code class="docutils literal notranslate"><span class="pre">stack_pred</span></code>.</p></li>
+<li><p>We calculate the accuracy of the stacking model by comparing the predictions <code class="docutils literal notranslate"><span class="pre">stack_pred</span></code> with the true labels <code class="docutils literal notranslate"><span class="pre">y_test_os</span></code>. The accuracy score gives us an indication of how well the stacking model is performing on the oversampled test data.</p></li>
+</ul>
+<p>The final output displays the accuracy of the stacking model when evaluated on the oversampled test data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cv_strategy</span> <span class="o">=</span> <span class="n">StratifiedKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">meta_features_train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;knn_pred&#39;</span><span class="p">:</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">knn_best</span><span class="p">,</span> <span class="n">X_train_scaled_os</span><span class="p">,</span> <span class="n">y_train_os</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv_strategy</span><span class="p">),</span>
+    <span class="s1">&#39;dt_pred&#39;</span><span class="p">:</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">dt_best</span><span class="p">,</span> <span class="n">X_train_scaled_os</span><span class="p">,</span> <span class="n">y_train_os</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv_strategy</span><span class="p">)</span>
+<span class="p">})</span>
+
+<span class="n">rf_best</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_scaled_os</span><span class="p">,</span> <span class="n">y_train_os</span><span class="p">)</span>
+<span class="n">rf_oob_predictions</span> <span class="o">=</span> <span class="n">rf_best</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_train_scaled_os</span><span class="p">)</span>
+
+<span class="n">meta_features_train</span><span class="p">[</span><span class="s1">&#39;rf_pred&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rf_oob_predictions</span>
+<span class="n">meta_features_train</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_train_os</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">meta_features_train</span>
+
+<span class="n">gnb</span> <span class="o">=</span> <span class="n">GaussianNB</span><span class="p">()</span>
+<span class="n">gnb</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">meta_features_train</span><span class="p">[[</span><span class="s1">&#39;knn_pred&#39;</span><span class="p">,</span> <span class="s1">&#39;rf_pred&#39;</span><span class="p">,</span> <span class="s1">&#39;dt_pred&#39;</span><span class="p">]],</span> <span class="n">meta_features_train</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">])</span>
+
+<span class="n">meta_features_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;knn_pred&#39;</span><span class="p">:</span> <span class="n">knn_best</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_scaled_os</span><span class="p">),</span>
+    <span class="s1">&#39;rf_pred&#39;</span><span class="p">:</span> <span class="n">rf_best</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_scaled_os</span><span class="p">),</span>
+    <span class="s1">&#39;dt_pred&#39;</span><span class="p">:</span> <span class="n">dt_best</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_scaled_os</span><span class="p">)</span>
+<span class="p">})</span>
+
+<span class="n">stack_pred</span> <span class="o">=</span> <span class="n">gnb</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">meta_features_test</span><span class="p">)</span>
+<span class="n">stack_acc</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span> <span class="n">stack_pred</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Stacking Accuracy with Naive Bayes:&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">stack_acc</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Stacking Accuracy with Naive Bayes: 0.9676
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Improvement over Best KNN (</span><span class="si">{</span><span class="n">knn_acc_best</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="p">(</span><span class="n">stack_acc</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">knn_acc_best</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Improvement over Best RF (</span><span class="si">{</span><span class="n">rf_acc_best</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="p">(</span><span class="n">stack_acc</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">rf_acc_best</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Improvement over Best DT (</span><span class="si">{</span><span class="n">dt_acc_best</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="p">(</span><span class="n">stack_acc</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">dt_acc_best</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Improvement over Best KNN (0.9299): 3.78%
+Improvement over Best RF (0.9676): 0.00%
+Improvement over Best DT (0.9478): 1.98%
+</pre></div>
+</div>
+</div>
+</div>
+<p>This section compares the accuracy of the stacking model with the best-performing base models. The stacking classifier shows a significant improvement over KNN, a modest gain over the Decision Tree, and matches the performance of the Random Forest. This demonstrates that stacking can enhance model robustness and, in certain cases, improve predictive accuracy.</p>
+<p>Let’s see why we don’t have a significant improvement over our base models by looking at the correlations</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">meta_features_train</span><span class="p">[[</span><span class="s1">&#39;knn_pred&#39;</span><span class="p">,</span> <span class="s1">&#39;rf_pred&#39;</span><span class="p">,</span> <span class="s1">&#39;dt_pred&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">corr</span><span class="p">(),</span> <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;coolwarm&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Meta-Feature Correlation Heatmap&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/01d4c61f0e99a2417ee8678ab10768eb78406a215606d7c0e2fa77a33b916151.png" src="_images/01d4c61f0e99a2417ee8678ab10768eb78406a215606d7c0e2fa77a33b916151.png" />
+</div>
+</div>
+<p>Our correlation analysis shows that the three models (KNN, Random Forest, and Decision Tree) are making very similar predictions. When models are too similar in a stacking ensemble, we lose the main benefit of combining different models.</p>
+<p>This similarity happens because:</p>
+<ol class="arabic simple">
+<li><p>All three models work in similar ways - they all make decisions by finding patterns in nearby data points</p></li>
+<li><p>We trained all models using exactly the same features</p></li>
+<li><p>We didn’t specifically try to make the models different from each other</p></li>
+</ol>
+<p>To make our stacking model better, we can try these simple changes:</p>
+<p>First, we could add different types of models like logistic regression or SVM, which work in completely different ways than our current models.</p>
+<p>Second, we could train each model with different features. This would make each model good at spotting different patterns in the data.</p>
+<p>Third, we could process the data differently for each model. For example, we could scale the data one way for the first model and another way for the second model.</p>
+<p>Finally, we could change the settings for each model. Instead of making every model as accurate as possible, we could set up some models to be better at finding positive cases and others to be better at finding negative cases.</p>
+<p>The last option is the one that seems better for us so we will try that.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># First, define specialized models with different objectives</span>
+<span class="c1"># KNN optimized for high recall (finding more positive cases)</span>
+<span class="n">knn_recall_params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;n_neighbors&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>  <span class="c1"># Smaller neighborhood tends to increase recall</span>
+    <span class="s1">&#39;weights&#39;</span><span class="p">:</span> <span class="s1">&#39;distance&#39;</span><span class="p">,</span>  <span class="c1"># Give closer neighbors more influence</span>
+    <span class="s1">&#39;metric&#39;</span><span class="p">:</span> <span class="s1">&#39;manhattan&#39;</span>  <span class="c1"># Different distance metric</span>
+<span class="p">}</span>
+
+<span class="c1"># Random Forest optimized for precision (avoiding false positives)</span>
+<span class="n">rf_precision_params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;n_estimators&#39;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+    <span class="s1">&#39;min_samples_leaf&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>  <span class="c1"># More conservative predictions</span>
+    <span class="s1">&#39;random_state&#39;</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span>
+    <span class="s1">&#39;class_weight&#39;</span><span class="p">:</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>  <span class="c1"># Give more weight to negative class</span>
+<span class="p">}</span>
+
+<span class="c1"># Decision Tree optimized for balanced performance</span>
+<span class="n">dt_balanced_params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;random_state&#39;</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span>
+    <span class="s1">&#39;class_weight&#39;</span><span class="p">:</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>  <span class="c1"># Give more weight to positive class</span>
+    <span class="s1">&#39;criterion&#39;</span><span class="p">:</span> <span class="s1">&#39;entropy&#39;</span>  <span class="c1"># Different split criterion</span>
+<span class="p">}</span>
+
+<span class="c1"># Train specialized models</span>
+<span class="n">cv_strategy</span> <span class="o">=</span> <span class="n">StratifiedKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># KNN for high recall</span>
+<span class="n">knn_recall</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="o">**</span><span class="n">knn_recall_params</span><span class="p">)</span>
+<span class="n">knn_recall</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_scaled_os</span><span class="p">,</span> <span class="n">y_train_os</span><span class="p">)</span>
+<span class="n">knn_recall_preds</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">knn_recall</span><span class="p">,</span> <span class="n">X_train_scaled_os</span><span class="p">,</span> <span class="n">y_train_os</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv_strategy</span><span class="p">)</span>
+<span class="n">knn_recall_proba</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">knn_recall</span><span class="p">,</span> <span class="n">X_train_scaled_os</span><span class="p">,</span> <span class="n">y_train_os</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv_strategy</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;predict_proba&#39;</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># RF for high precision</span>
+<span class="n">rf_precision</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="o">**</span><span class="n">rf_precision_params</span><span class="p">)</span>
+<span class="n">rf_precision</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_scaled_os</span><span class="p">,</span> <span class="n">y_train_os</span><span class="p">)</span>
+<span class="n">rf_precision_preds</span> <span class="o">=</span> <span class="n">rf_precision</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_train_scaled_os</span><span class="p">)</span>
+<span class="n">rf_precision_proba</span> <span class="o">=</span> <span class="n">rf_precision</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train_scaled_os</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># DT for balanced performance</span>
+<span class="n">dt_balanced</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="o">**</span><span class="n">dt_balanced_params</span><span class="p">)</span>
+<span class="n">dt_balanced</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_scaled_os</span><span class="p">,</span> <span class="n">y_train_os</span><span class="p">)</span>
+<span class="n">dt_balanced_preds</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">dt_balanced</span><span class="p">,</span> <span class="n">X_train_scaled_os</span><span class="p">,</span> <span class="n">y_train_os</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv_strategy</span><span class="p">)</span>
+<span class="n">dt_balanced_proba</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">dt_balanced</span><span class="p">,</span> <span class="n">X_train_scaled_os</span><span class="p">,</span> <span class="n">y_train_os</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv_strategy</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;predict_proba&#39;</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># Create meta-features with different optimization objectives</span>
+<span class="n">meta_features_train_specialized</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;knn_recall_pred&#39;</span><span class="p">:</span> <span class="n">knn_recall_proba</span><span class="p">,</span>
+    <span class="s1">&#39;rf_precision_pred&#39;</span><span class="p">:</span> <span class="n">rf_precision_proba</span><span class="p">,</span>
+    <span class="s1">&#39;dt_balanced_pred&#39;</span><span class="p">:</span> <span class="n">dt_balanced_proba</span>
+<span class="p">})</span>
+
+<span class="c1"># Check correlation of specialized models</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">correlation_matrix</span> <span class="o">=</span> <span class="n">meta_features_train_specialized</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">correlation_matrix</span><span class="p">,</span> <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;coolwarm&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Meta-Feature Correlation Heatmap (Specialized Models)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="c1"># Evaluate individual model specialized performance</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">precision_score</span><span class="p">,</span> <span class="n">recall_score</span><span class="p">,</span> <span class="n">f1_score</span>
+
+<span class="c1"># Test set predictions</span>
+<span class="n">knn_recall_test_pred</span> <span class="o">=</span> <span class="n">knn_recall</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_scaled_os</span><span class="p">)</span>
+<span class="n">rf_precision_test_pred</span> <span class="o">=</span> <span class="n">rf_precision</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_scaled_os</span><span class="p">)</span>
+<span class="n">dt_balanced_test_pred</span> <span class="o">=</span> <span class="n">dt_balanced</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_scaled_os</span><span class="p">)</span>
+
+<span class="c1"># Display specialized metrics</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;KNN (Recall-Optimized):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Precision: </span><span class="si">{</span><span class="n">precision_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">knn_recall_test_pred</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Recall: </span><span class="si">{</span><span class="n">recall_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">knn_recall_test_pred</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  F1 Score: </span><span class="si">{</span><span class="n">f1_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">knn_recall_test_pred</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Accuracy: </span><span class="si">{</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">knn_recall_test_pred</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Random Forest (Precision-Optimized):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Precision: </span><span class="si">{</span><span class="n">precision_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">rf_precision_test_pred</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Recall: </span><span class="si">{</span><span class="n">recall_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">rf_precision_test_pred</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  F1 Score: </span><span class="si">{</span><span class="n">f1_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">rf_precision_test_pred</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Accuracy: </span><span class="si">{</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">rf_precision_test_pred</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Decision Tree (Balanced):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Precision: </span><span class="si">{</span><span class="n">precision_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">dt_balanced_test_pred</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Recall: </span><span class="si">{</span><span class="n">recall_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">dt_balanced_test_pred</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  F1 Score: </span><span class="si">{</span><span class="n">f1_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">dt_balanced_test_pred</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Accuracy: </span><span class="si">{</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">dt_balanced_test_pred</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Train the meta-classifier with specialized models</span>
+<span class="n">meta_features_test_specialized</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;knn_recall_pred&#39;</span><span class="p">:</span> <span class="n">knn_recall</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test_scaled_os</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="s1">&#39;rf_precision_pred&#39;</span><span class="p">:</span> <span class="n">rf_precision</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test_scaled_os</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="s1">&#39;dt_balanced_pred&#39;</span><span class="p">:</span> <span class="n">dt_balanced</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test_scaled_os</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="p">})</span>
+
+<span class="c1"># Train meta-model</span>
+<span class="n">gnb_specialized</span> <span class="o">=</span> <span class="n">GaussianNB</span><span class="p">()</span>
+<span class="n">gnb_specialized</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">meta_features_train_specialized</span><span class="p">,</span> <span class="n">y_train_os</span><span class="p">)</span>
+<span class="n">stack_pred_specialized</span> <span class="o">=</span> <span class="n">gnb_specialized</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">meta_features_test_specialized</span><span class="p">)</span>
+<span class="n">stack_acc_specialized</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span> <span class="n">stack_pred_specialized</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Stacking Results (Specialized Models):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Accuracy: </span><span class="si">{</span><span class="n">stack_acc_specialized</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Precision: </span><span class="si">{</span><span class="n">precision_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">stack_pred_specialized</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Recall: </span><span class="si">{</span><span class="n">recall_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">stack_pred_specialized</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  F1 Score: </span><span class="si">{</span><span class="n">f1_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">stack_pred_specialized</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Compare with individual model performances</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Comparison with Individual Models:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Improvement over KNN: </span><span class="si">{</span><span class="p">(</span><span class="n">stack_acc_specialized</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">knn_recall_test_pred</span><span class="p">))</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Improvement over RF: </span><span class="si">{</span><span class="p">(</span><span class="n">stack_acc_specialized</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">rf_precision_test_pred</span><span class="p">))</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Improvement over DT: </span><span class="si">{</span><span class="p">(</span><span class="n">stack_acc_specialized</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">dt_balanced_test_pred</span><span class="p">))</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/6cb774f3bcc548fd98de67a28652fdfa0c762967aba49f74828effab45405f1d.png" src="_images/6cb774f3bcc548fd98de67a28652fdfa0c762967aba49f74828effab45405f1d.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>KNN (Recall-Optimized):
+  Precision: 0.9048
+  Recall: 0.9399
+  F1 Score: 0.9220
+  Accuracy: 0.9191
+
+Random Forest (Precision-Optimized):
+  Precision: 0.9818
+  Recall: 0.9505
+  F1 Score: 0.9659
+  Accuracy: 0.9658
+
+Decision Tree (Balanced):
+  Precision: 0.9502
+  Recall: 0.9435
+  F1 Score: 0.9468
+  Accuracy: 0.9460
+
+Stacking Results (Specialized Models):
+  Accuracy: 0.9640
+  Precision: 0.9713
+  Recall: 0.9576
+  F1 Score: 0.9644
+
+Comparison with Individual Models:
+  Improvement over KNN: 4.50%
+  Improvement over RF: -0.18%
+  Improvement over DT: 1.80%
+</pre></div>
+</div>
+</div>
+</div>
+<p>Since the models remain highly correlated and the ensemble performs worse than the standalone Random Forest, we now experiment with removing the Random Forest — the most correlated model — and replacing it with Logistic Regression to potentially improve diversity and overall performance.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lr_balanced_params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;random_state&#39;</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span>
+    <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> 
+    <span class="s1">&#39;class_weight&#39;</span><span class="p">:</span> <span class="s1">&#39;balanced&#39;</span><span class="p">,</span>  
+    <span class="s1">&#39;solver&#39;</span><span class="p">:</span> <span class="s1">&#39;liblinear&#39;</span>
+<span class="p">}</span>
+
+<span class="n">cv_strategy</span> <span class="o">=</span> <span class="n">StratifiedKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">lr_balanced</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="o">**</span><span class="n">lr_balanced_params</span><span class="p">)</span>
+<span class="n">lr_balanced</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_scaled_os</span><span class="p">,</span> <span class="n">y_train_os</span><span class="p">)</span>
+<span class="n">lr_balanced_preds</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">lr_balanced</span><span class="p">,</span> <span class="n">X_train_scaled_os</span><span class="p">,</span> <span class="n">y_train_os</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv_strategy</span><span class="p">)</span>
+<span class="n">lr_balanced_proba</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">lr_balanced</span><span class="p">,</span> <span class="n">X_train_scaled_os</span><span class="p">,</span> <span class="n">y_train_os</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv_strategy</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;predict_proba&#39;</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="n">meta_features_train_specialized2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;knn_best&#39;</span><span class="p">:</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">knn_best</span><span class="p">,</span> <span class="n">X_train_scaled_os</span><span class="p">,</span> <span class="n">y_train_os</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv_strategy</span><span class="p">),</span>
+    <span class="s1">&#39;dt_best&#39;</span><span class="p">:</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">dt_best</span><span class="p">,</span> <span class="n">X_train_scaled_os</span><span class="p">,</span> <span class="n">y_train_os</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv_strategy</span><span class="p">),</span>
+    <span class="s1">&#39;lr_balanced&#39;</span><span class="p">:</span> <span class="n">lr_balanced_proba</span>
+<span class="p">})</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">correlation_matrix</span> <span class="o">=</span> <span class="n">meta_features_train_specialized2</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">correlation_matrix</span><span class="p">,</span> <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;coolwarm&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Meta-Feature Correlation Heatmap (KNN, DT, LR)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">precision_score</span><span class="p">,</span> <span class="n">recall_score</span><span class="p">,</span> <span class="n">f1_score</span>
+
+<span class="n">knn_best_test_pred</span> <span class="o">=</span> <span class="n">knn_best</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_scaled_os</span><span class="p">)</span>
+<span class="n">dt_best_test_pred</span> <span class="o">=</span> <span class="n">dt_best</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_scaled_os</span><span class="p">)</span>
+<span class="n">lr_balanced_test_pred</span> <span class="o">=</span> <span class="n">lr_balanced</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_scaled_os</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;KNN (Recall-Optimized):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Precision: </span><span class="si">{</span><span class="n">precision_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">knn_best_test_pred</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Recall: </span><span class="si">{</span><span class="n">recall_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">knn_best_test_pred</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  F1 Score: </span><span class="si">{</span><span class="n">f1_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">knn_best_test_pred</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Accuracy: </span><span class="si">{</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">knn_best_test_pred</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Decision Tree (Precision-Optimized):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Precision: </span><span class="si">{</span><span class="n">precision_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">dt_best_test_pred</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Recall: </span><span class="si">{</span><span class="n">recall_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">dt_best_test_pred</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  F1 Score: </span><span class="si">{</span><span class="n">f1_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">dt_best_test_pred</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Accuracy: </span><span class="si">{</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">dt_best_test_pred</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Logistic Regression (Balanced):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Precision: </span><span class="si">{</span><span class="n">precision_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">lr_balanced_test_pred</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Recall: </span><span class="si">{</span><span class="n">recall_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">lr_balanced_test_pred</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  F1 Score: </span><span class="si">{</span><span class="n">f1_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">lr_balanced_test_pred</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Accuracy: </span><span class="si">{</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">lr_balanced_test_pred</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">meta_features_test_specialized2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;knn_best&#39;</span><span class="p">:</span> <span class="n">knn_best</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_scaled_os</span><span class="p">),</span>
+    <span class="s1">&#39;dt_best&#39;</span><span class="p">:</span> <span class="n">dt_best</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_scaled_os</span><span class="p">),</span>
+    <span class="s1">&#39;lr_balanced&#39;</span><span class="p">:</span> <span class="n">lr_balanced</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_scaled_os</span><span class="p">)</span>
+<span class="p">})</span>
+
+<span class="n">gnb_specialized2</span> <span class="o">=</span> <span class="n">GaussianNB</span><span class="p">()</span>
+<span class="n">gnb_specialized2</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">meta_features_train_specialized2</span><span class="p">,</span> <span class="n">y_train_os</span><span class="p">)</span>
+<span class="n">stack_pred_specialized2</span> <span class="o">=</span> <span class="n">gnb_specialized2</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">meta_features_test_specialized2</span><span class="p">)</span>
+<span class="n">stack_acc_specialized2</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span> <span class="n">stack_pred_specialized2</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Stacking Results (KNN, DT, LR):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Accuracy: </span><span class="si">{</span><span class="n">stack_acc_specialized2</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Precision: </span><span class="si">{</span><span class="n">precision_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">stack_pred_specialized2</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Recall: </span><span class="si">{</span><span class="n">recall_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">stack_pred_specialized2</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  F1 Score: </span><span class="si">{</span><span class="n">f1_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">stack_pred_specialized2</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Comparison with Individual Models:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Improvement over KNN: </span><span class="si">{</span><span class="p">(</span><span class="n">stack_acc_specialized2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">knn_best_test_pred</span><span class="p">))</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Improvement over DT: </span><span class="si">{</span><span class="p">(</span><span class="n">stack_acc_specialized2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">dt_best_test_pred</span><span class="p">))</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Improvement over LR: </span><span class="si">{</span><span class="p">(</span><span class="n">stack_acc_specialized2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">lr_balanced_test_pred</span><span class="p">))</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/d340abc2416d766886915e8638c9c22d2aa81ab127e1d8aebc0c82b6540b1156.png" src="_images/d340abc2416d766886915e8638c9c22d2aa81ab127e1d8aebc0c82b6540b1156.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>KNN (Recall-Optimized):
+  Precision: 0.9266
+  Recall: 0.9364
+  F1 Score: 0.9315
+  Accuracy: 0.9299
+
+Decision Tree (Precision-Optimized):
+  Precision: 0.9472
+  Recall: 0.9505
+  F1 Score: 0.9489
+  Accuracy: 0.9478
+
+Logistic Regression (Balanced):
+  Precision: 0.8357
+  Recall: 0.8445
+  F1 Score: 0.8401
+  Accuracy: 0.8363
+
+Stacking Results (KNN, DT, LR):
+  Accuracy: 0.9317
+  Precision: 0.9268
+  Recall: 0.9399
+  F1 Score: 0.9333
+
+Comparison with Individual Models:
+  Improvement over KNN: 0.18%
+  Improvement over DT: -1.62%
+  Improvement over LR: 9.53%
+</pre></div>
+</div>
+</div>
+</div>
+<p>Although replacing the Random Forest with Logistic Regression led to a decrease in overall accuracy, it also reduced the correlation among the meta-features. To further explore this trade-off, we now test the same set of base models using a Linear Regression meta-model to assess whether it can improve the final ensemble’s performance.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lr</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+<span class="n">lr</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">meta_features_train_specialized</span><span class="p">,</span> <span class="n">y_train_os</span><span class="p">)</span>
+
+<span class="n">meta_features_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;knn_best&#39;</span><span class="p">:</span> <span class="n">knn_best</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_scaled_os</span><span class="p">),</span>
+    <span class="s1">&#39;dt_best&#39;</span><span class="p">:</span> <span class="n">dt_best</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_scaled_os</span><span class="p">),</span>
+    <span class="s1">&#39;lr_balanced&#39;</span><span class="p">:</span> <span class="n">lr_balanced</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_scaled_os</span><span class="p">)</span>
+<span class="p">})</span>
+
+<span class="n">stack_pred2</span> <span class="o">=</span> <span class="n">lr</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">meta_features_test</span><span class="p">)</span>
+
+<span class="n">stack_pred2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">stack_pred2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">stack_acc2</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span> <span class="n">stack_pred2</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Stacking Results (KNN, DT, LR):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Accuracy: </span><span class="si">{</span><span class="n">stack_acc2</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Precision: </span><span class="si">{</span><span class="n">precision_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">stack_pred2</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Recall: </span><span class="si">{</span><span class="n">recall_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">stack_pred2</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  F1 Score: </span><span class="si">{</span><span class="n">f1_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">stack_pred2</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Compare with individual model performances</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Comparison with Individual Models:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Improvement over KNN: </span><span class="si">{</span><span class="p">(</span><span class="n">stack_acc2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">knn_best_test_pred</span><span class="p">))</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Improvement over DT: </span><span class="si">{</span><span class="p">(</span><span class="n">stack_acc2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">dt_best_test_pred</span><span class="p">))</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Improvement over LR: </span><span class="si">{</span><span class="p">(</span><span class="n">stack_acc2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span><span class="w"> </span><span class="n">lr_balanced_test_pred</span><span class="p">))</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">211</span><span class="p">],</span> <span class="n">line</span> <span class="mi">10</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">lr</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">meta_features_train_specialized</span><span class="p">,</span> <span class="n">y_train_os</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">meta_features_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="s1">&#39;knn_best&#39;</span><span class="p">:</span> <span class="n">knn_best</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_scaled_os</span><span class="p">),</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span>     <span class="s1">&#39;dt_best&#39;</span><span class="p">:</span> <span class="n">dt_best</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_scaled_os</span><span class="p">),</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span>     <span class="s1">&#39;lr_balanced&#39;</span><span class="p">:</span> <span class="n">lr_balanced</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_scaled_os</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="p">})</span>
+<span class="ne">---&gt; </span><span class="mi">10</span> <span class="n">stack_pred2</span> <span class="o">=</span> <span class="n">lr</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">meta_features_test</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="n">stack_pred2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">stack_pred2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">13</span> <span class="n">stack_acc2</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span> <span class="n">stack_pred2</span><span class="p">)</span>
+
+<span class="nn">File ~/Library/CloudStorage/OneDrive-FordhamUniversity/Fordham/Corsi/Data Mining/.venv/lib/python3.12/site-packages/sklearn/linear_model/_base.py:297,</span> in <span class="ni">LinearModel.predict</span><span class="nt">(self, X)</span>
+<span class="g g-Whitespace">    </span><span class="mi">283</span> <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">284</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">285</span><span class="sd">     Predict using the linear model.</span>
+<span class="g g-Whitespace">    </span><span class="mi">286</span><span class="sd"> </span>
+<span class="sd">   (...)    295         Returns predicted values.</span>
+<span class="g g-Whitespace">    </span><span class="mi">296</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">297</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decision_function</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="nn">File ~/Library/CloudStorage/OneDrive-FordhamUniversity/Fordham/Corsi/Data Mining/.venv/lib/python3.12/site-packages/sklearn/linear_model/_base.py:276,</span> in <span class="ni">LinearModel._decision_function</span><span class="nt">(self, X)</span>
+<span class="g g-Whitespace">    </span><span class="mi">273</span> <span class="k">def</span><span class="w"> </span><span class="nf">_decision_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">274</span>     <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">276</span>     <span class="n">X</span> <span class="o">=</span> <span class="n">validate_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;csr&quot;</span><span class="p">,</span> <span class="s2">&quot;csc&quot;</span><span class="p">,</span> <span class="s2">&quot;coo&quot;</span><span class="p">],</span> <span class="n">reset</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">277</span>     <span class="n">coef_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coef_</span>
+<span class="g g-Whitespace">    </span><span class="mi">278</span>     <span class="k">if</span> <span class="n">coef_</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+
+<span class="nn">File ~/Library/CloudStorage/OneDrive-FordhamUniversity/Fordham/Corsi/Data Mining/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2919,</span> in <span class="ni">validate_data</span><span class="nt">(_estimator, X, y, reset, validate_separately, skip_check_array, **check_params)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2835</span> <span class="k">def</span><span class="w"> </span><span class="nf">validate_data</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">2836</span>     <span class="n">_estimator</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">2837</span>     <span class="o">/</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>   <span class="mi">2843</span>     <span class="o">**</span><span class="n">check_params</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">2844</span> <span class="p">):</span>
+<span class="g g-Whitespace">   </span><span class="mi">2845</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;Validate input data and set or check feature names and counts of the input.</span>
+<span class="g g-Whitespace">   </span><span class="mi">2846</span><span class="sd"> </span>
+<span class="g g-Whitespace">   </span><span class="mi">2847</span><span class="sd">     This helper function should be used in an estimator that requires input</span>
+<span class="sd">   (...)   2917         validated.</span>
+<span class="g g-Whitespace">   </span><span class="mi">2918</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="ne">-&gt; </span><span class="mi">2919</span>     <span class="n">_check_feature_names</span><span class="p">(</span><span class="n">_estimator</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">reset</span><span class="o">=</span><span class="n">reset</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2920</span>     <span class="n">tags</span> <span class="o">=</span> <span class="n">get_tags</span><span class="p">(</span><span class="n">_estimator</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2921</span>     <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">tags</span><span class="o">.</span><span class="n">target_tags</span><span class="o">.</span><span class="n">required</span><span class="p">:</span>
+
+<span class="nn">File ~/Library/CloudStorage/OneDrive-FordhamUniversity/Fordham/Corsi/Data Mining/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2777,</span> in <span class="ni">_check_feature_names</span><span class="nt">(estimator, X, reset)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2774</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">missing_names</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">unexpected_names</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">2775</span>     <span class="n">message</span> <span class="o">+=</span> <span class="s2">&quot;Feature names must be in the same order as they were in fit.</span><span class="se">\n</span><span class="s2">&quot;</span>
+<span class="ne">-&gt; </span><span class="mi">2777</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+<span class="ne">ValueError</span>: The feature names should match those that were passed during fit.
+<span class="n">Feature</span> <span class="n">names</span> <span class="n">unseen</span> <span class="n">at</span> <span class="n">fit</span> <span class="n">time</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">dt_best</span>
+<span class="o">-</span> <span class="n">knn_best</span>
+<span class="o">-</span> <span class="n">lr_balanced</span>
+<span class="n">Feature</span> <span class="n">names</span> <span class="n">seen</span> <span class="n">at</span> <span class="n">fit</span> <span class="n">time</span><span class="p">,</span> <span class="n">yet</span> <span class="n">now</span> <span class="n">missing</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">dt_balanced_pred</span>
+<span class="o">-</span> <span class="n">knn_recall_pred</span>
+<span class="o">-</span> <span class="n">rf_precision_pred</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>With Linear Regression as the meta-model, the stacking ensemble’s accuracy improved, matching the performance of the Decision Tree and surpassing both KNN and Logistic Regression individually. This suggests that Linear Regression is better able to leverage the complementary strengths of the base models in this configuration.</p>
+</section>
+</section>
+<section id="confusion-matrix">
+<h2>Confusion Matrix<a class="headerlink" href="#confusion-matrix" title="Link to this heading">#</a></h2>
+<p>To visually compare the performance of each stacking model, we plotted their corresponding confusion matrices. This visualization enables us to assess not only overall accuracy but also each model’s ability to distinguish between Alzheimer’s and non-Alzheimer’s cases by examining the distribution of true positives, false positives, true negatives, and false negatives.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_confusion_matrices</span><span class="p">(</span><span class="n">y_test_stack</span><span class="p">,</span> <span class="n">stack_pred</span><span class="p">,</span> <span class="n">stack_acc</span><span class="p">,</span>
+                            <span class="n">stack_pred2</span><span class="p">,</span> <span class="n">stack_acc2</span><span class="p">,</span> 
+                            <span class="n">stack_pred_specialized</span><span class="p">,</span> <span class="n">stack_acc_specialized</span><span class="p">,</span> 
+                            <span class="n">stack_pred_specialized2</span><span class="p">,</span> <span class="n">stack_acc_specialized2</span><span class="p">):</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+    <span class="n">axes</span> <span class="o">=</span> <span class="n">axes</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="n">display_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;No Alzheimer&#39;</span><span class="p">,</span> <span class="s1">&#39;Alzheimer&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Stacking 1</span>
+    <span class="n">cm_stack</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_test_stack</span><span class="p">,</span> <span class="n">stack_pred</span><span class="p">)</span>
+    <span class="n">ConfusionMatrixDisplay</span><span class="p">(</span><span class="n">confusion_matrix</span><span class="o">=</span><span class="n">cm_stack</span><span class="p">,</span> <span class="n">display_labels</span><span class="o">=</span><span class="n">display_labels</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Stacking NB w/ Normal Models</span><span class="se">\n</span><span class="s1">Accuracy: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">stack_acc</span><span class="p">,</span> <span class="mi">4</span><span class="p">)))</span>
+
+    <span class="c1"># Stacking 3    </span>
+    <span class="n">cm_stack_specialized</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_test_stack</span><span class="p">,</span> <span class="n">stack_pred_specialized</span><span class="p">)</span>
+    <span class="n">ConfusionMatrixDisplay</span><span class="p">(</span><span class="n">confusion_matrix</span><span class="o">=</span><span class="n">cm_stack_specialized</span><span class="p">,</span> <span class="n">display_labels</span><span class="o">=</span><span class="n">display_labels</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Stacking NB w/ Updated Models </span><span class="se">\n</span><span class="s1">Accuracy: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">stack_acc_specialized</span><span class="p">,</span> <span class="mi">4</span><span class="p">)))</span>
+
+    <span class="c1"># Stacking 4</span>
+    <span class="n">cm_stack_specialized2</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_test_stack</span><span class="p">,</span> <span class="n">stack_pred_specialized2</span><span class="p">)</span>
+    <span class="n">ConfusionMatrixDisplay</span><span class="p">(</span><span class="n">confusion_matrix</span><span class="o">=</span><span class="n">cm_stack_specialized2</span><span class="p">,</span> <span class="n">display_labels</span><span class="o">=</span><span class="n">display_labels</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Stacking NB w/ Logistic Regression and Normal Models </span><span class="se">\n</span><span class="s1">Accuracy: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">stack_acc_specialized2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)))</span>
+
+    <span class="c1"># Stacking 2</span>
+    <span class="n">cm_stack2</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_test_stack</span><span class="p">,</span> <span class="n">stack_pred2</span><span class="p">)</span>
+    <span class="n">ConfusionMatrixDisplay</span><span class="p">(</span><span class="n">confusion_matrix</span><span class="o">=</span><span class="n">cm_stack2</span><span class="p">,</span> <span class="n">display_labels</span><span class="o">=</span><span class="n">display_labels</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Stacking Linear Regression w/ Logistic Regression and Normal Models </span><span class="se">\n</span><span class="s1">Accuracy: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">stack_acc2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)))</span>
+
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">plot_confusion_matrices</span><span class="p">(</span><span class="n">y_test_os</span><span class="p">,</span> <span class="n">stack_pred</span><span class="p">,</span> <span class="n">stack_acc</span><span class="p">,</span>
+                        <span class="n">stack_pred2</span><span class="p">,</span> <span class="n">stack_acc2</span><span class="p">,</span> 
+                        <span class="n">stack_pred_specialized</span><span class="p">,</span> <span class="n">stack_acc_specialized</span><span class="p">,</span> 
+                        <span class="n">stack_pred_specialized2</span><span class="p">,</span> <span class="n">stack_acc_specialized2</span><span class="p">)</span> 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/c59fc99088c901d4ff33313b53b88ece7f6a392fa3b2b2e29a0804b74d9d34f6.png" src="_images/c59fc99088c901d4ff33313b53b88ece7f6a392fa3b2b2e29a0804b74d9d34f6.png" />
+</div>
+</div>
+<p>The Stacking NB w/ Updated Models achieved the highest accuracy at 0.9664 among the evaluated models. However, due to high correlation and performance poorer than the random forest classifier within the model, we updated it by replacing the random forest with logistic regression. Among the two models using logistic regression, the Stacking Linear Regression w/ Logistic Regression and Normal Models performed best with an accuracy of 0.9478. Despite this, it still does not surpass the accuracy of the base decision tree model within the stacking ensemble, indicating that the stacking approach is not improving classification performance over the base model.</p>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading">#</a></h2>
+<p>This study aimed to enhance Alzheimer’s classification through a stacking ensemble approach, but the results highlight the limitations of this method for the given task. Despite experimenting with oversampled data, optimizing individual models (KNN for recall, random forest for precision, and a balanced decision tree), and adjusting the ensemble by replacing the highly correlated random forest with logistic regression, the stacking models consistently failed to outperform the base decision tree. Even with a linear regression meta-model, which reduced correlation and matched the decision tree’s accuracy, the stacking approach offered no improvement in classification performance. The confusion matrix analysis further confirmed that while some stacking configurations improved specific metrics, the overall accuracy remained at or below the baseline. This suggests that for this dataset, the complexity of stacking does not yield better results than a well-tuned base model like the decision tree, emphasizing the importance of carefully evaluating the trade-offs between model complexity and performance in medical classification tasks.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="RandomForest.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Random Forest Classifier</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importing-modules">Importing modules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#retrieval">Retrieval</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#split">Split</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#models-selection">Models selection</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#knn">KNN</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#random-forest">Random Forest</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#decision-tree">Decision Tree</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stacking-model">Stacking Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#naive-bayes">Naive Bayes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#confusion-matrix">Confusion Matrix</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusion</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Team1
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

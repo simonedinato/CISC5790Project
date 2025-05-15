@@ -5,10 +5,9 @@ format: jb-book
 root: introduction
 chapters:
 - file: data_retrieval
-- file: data_preprocessing
-- file: exploratory_data_analysis
+- file: create_oversampled
+- file: Data_Preprocessing
+- file: KNN
+- file: "Decision Tree"
 - file: RandomForest
-- file: AdaBoosting
-- file: Clustering
-- file: Bagging Decision Tree Model
-- file: Readme
+- file: stacking
